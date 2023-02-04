@@ -34,7 +34,7 @@ public struct NumericSequenceGenerator: SequenceGenerator {
     public init() { }
     public func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
-        let text = "\(index + 1)."
+        let text = "\(index + 1)TEST."
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
