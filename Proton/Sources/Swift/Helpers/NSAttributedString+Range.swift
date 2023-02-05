@@ -163,10 +163,12 @@ public extension NSAttributedString {
                     if attr.key == .font {
                         let currFont = attr.value as! UIFont
                         let activeFont = activeAttributes[.font]! as! UIFont
-                        var intersectingTraits = activeFont.traits.intersection(currFont.traits)
+                        let intersectingTraits = activeFont.traits.intersection(currFont.traits)
+                        let differentTraits = activeFont.traits.symmetricDifference(currFont.traits)
                         
-                        if currFont.getStyle() != activeFont.getStyle() {
-                            activeAttributes[.font] = UIFont.preferredFont(forTextStyle: .callout).withTraints(traits: intersectingTraits)
+                        
+                        if currFont.getStyle() != activeFont.getStyle() || !differentTraits.isEmpty {
+                            activeAttributes[.font] = UIFont.systemFont(ofSize: 16).withTraints(traits: intersectingTraits)
                             continue
                         }
                         activeAttributes[.font] = activeFont.withTraints(traits: intersectingTraits)
