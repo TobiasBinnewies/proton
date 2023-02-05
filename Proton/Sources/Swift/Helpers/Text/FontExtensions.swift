@@ -110,6 +110,15 @@ public extension UIFont {
 
         return UIFont(descriptor: updatedFontDescriptor, size: 0.0)
     }
+    
+    func getStyle() -> UIFont.TextStyle? {
+        for style in TextStyle.allValues {
+            if self == style.prefferedFont {
+                return style
+            }
+        }
+        return nil
+    }
 }
 
 extension UIFontDescriptor.SymbolicTraits: Hashable {
@@ -135,4 +144,26 @@ extension UIFontDescriptor.SymbolicTraits: Hashable {
         classScripts,
         classSymbolic,
     ]
+}
+
+extension UIFont.TextStyle {
+    static let allValues: [UIFont.TextStyle] = [.body, .largeTitle, .title1, .title2, .title3, .callout, .caption1, .caption2, .headline, .subheadline, .footnote]
+    
+    var prefferedFont: UIFont {
+        switch self {
+        case .body: return UIFont.preferredFont(forTextStyle: .body)
+        case .largeTitle: return UIFont.preferredFont(forTextStyle: .largeTitle)
+        case .title1: return UIFont.preferredFont(forTextStyle: .title1)
+        case .title2: return UIFont.preferredFont(forTextStyle: .title2)
+        case .title3: return UIFont.preferredFont(forTextStyle: .title3)
+        case .callout: return UIFont.preferredFont(forTextStyle: .callout)
+        case .caption1: return UIFont.preferredFont(forTextStyle: .caption1)
+        case .caption2: return UIFont.preferredFont(forTextStyle: .caption2)
+        case .footnote: return UIFont.preferredFont(forTextStyle: .footnote)
+        case .headline: return UIFont.preferredFont(forTextStyle: .headline)
+        case .subheadline: return UIFont.preferredFont(forTextStyle: .subheadline)
+        default:
+            return UIFont()
+        }
+    }
 }
