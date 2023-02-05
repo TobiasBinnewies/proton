@@ -35,6 +35,10 @@ public class AttributesToggleCommand: EditorCommand {
         let selectedText = editor.selectedText
         if editor.isEmpty || editor.selectedRange == .zero || selectedText.length == 0 {
             attributes.forEach { attribute in
+                if attribute.key == .font {
+                    editor.typingAttributes[.font] = attribute.value
+                    return
+                }
                 if editor.typingAttributes[attribute.key] == nil {
                     editor.typingAttributes[attribute.key] = attribute.value
                 } else {
