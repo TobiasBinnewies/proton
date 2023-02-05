@@ -164,7 +164,7 @@ public extension NSAttributedString {
                         var activeTraits = (activeAttributes[.font]! as! UIFont).traits
                         var intersectingTraits = activeTraits.intersection(font.traits)
                         
-                        activeAttributes[.font] = font.withTraints(traits: intersectingTraits)
+                        activeAttributes[.font] = UIFont().withTraints(traits: intersectingTraits)
                         continue
                     }
                     if activeAttributes.keys.contains(attr.key), anyEquals(activeAttributes[attr.key]!, attr.value) {
