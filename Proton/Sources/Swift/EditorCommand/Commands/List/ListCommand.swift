@@ -48,7 +48,7 @@ public struct LineFormatting {
 
 /// Command that can be used to toggle list attributes of selected range of text.
 /// If the length of selected range of text is 0, the attributes are applied on the current line of text.
-class ListCommand: EditorCommand {
+public class ListCommand: EditorCommand {
     public init() { }
 
     /// Name of the command
