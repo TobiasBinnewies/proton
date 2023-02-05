@@ -12,6 +12,9 @@ import UIKit
 public class FontStyleCommand: AttributesToggleCommand {
     public init(style: UIFont.TextStyle) {
         super.init(name: CommandName("_Font-\(style.rawValue)-StyleCommand"),
-                   attributes: [.font: UIFont.preferredFont(forTextStyle: style)])
+                   attributes: [
+                    .fontStyle: style,
+                    .font: UIFont.preferredFont(forTextStyle: style)
+                   ])
     }
 }

@@ -49,9 +49,18 @@ class RichTextView: AutogrowingTextView {
         return superview as? EditorView
     }
 
+    @available(iOSApplicationExtension 11.0, *)
     var defaultTypingAttributes: RichTextAttributes {
         return [
             .font: defaultTextFormattingProvider?.font ?? richTextStorage.defaultFont,
+            .fontStyle: {
+                for style in UIFont.TextStyle.allValues {
+                    if style.prefferedFont == (defaultTextFormattingProvider?.font ?? richTextStorage.defaultFont) {
+                        return style
+                    }
+                }
+                return UIFont.TextStyle.body
+            }(),
             .paragraphStyle: defaultTextFormattingProvider?.paragraphStyle ?? richTextStorage.defaultParagraphStyle,
             .foregroundColor: defaultTextFormattingProvider?.textColor ?? richTextStorage.defaultTextColor
         ]
