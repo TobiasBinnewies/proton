@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OrderedListCommand: ListCommand {
+public class OrderedListCommand: ListCommand {
     
     /// Name of the command
     public override var name: CommandName {
