@@ -164,6 +164,12 @@ public extension NSAttributedString {
                     activeAttributes.removeValue(forKey: attr.key)
                 }
             }
+            activeAttributes.forEach { attr in
+                if !currAttributes.keys.contains(attr.key) {
+                    deletedAttributes.append(attr.key)
+                    activeAttributes.removeValue(forKey: attr.key)
+                }
+            }
             idx += 1
         }
         return activeAttributes
