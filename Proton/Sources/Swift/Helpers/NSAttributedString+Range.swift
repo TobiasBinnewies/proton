@@ -154,8 +154,8 @@ public extension NSAttributedString {
 //        var occouringFontStyles: Set<UIFont.TextStyle?> = []
         self.enumerateAttributes(in: range) { currAttributes, _, _ in
             for attr in currAttributes {
-                if !deletedAttributes.keys.contains(where: {$0 == attr.key}) {
-                    if !activeAttributes.keys.contains(where: {$0 == attr.key}) || anyEquals(activeAttributes[attr.key]!, attr.value)
+                if !deletedAttributes.keys.contains(attr.key) {
+                    if !activeAttributes.keys.contains(attr.key) || anyEquals(activeAttributes[attr.key]!, attr.value)
                          {
                         activeAttributes[attr.key] = attr.value
                         continue
@@ -179,5 +179,32 @@ public extension NSAttributedString {
         }
         let isEqual = (x as! AnyHashable) == (y as! AnyHashable)
         return isEqual
+    }
+    
+    /// Gets all Traints  that are present in the font through the whole range
+    /// - Parameter range: the range
+    /// - Returns: the traints
+    func getActiveTraits(inRange: NSRange? = nil) -> [UIFontDescriptor.SymbolicTraits]? {
+        let range = inRange ?? NSRange(location: 0, length: self.length)
+        if range.isEmpty || range.location < 0 || self.length < range.endLocation {
+            return nil
+        }
+        var trains: [UIFontDescriptor.SymbolicTraits: Bool] = {
+            var traits: [UIFontDescriptor.SymbolicTraits: Bool] = [:]
+            for traint in UIFontDescriptor.SymbolicTraits.allTrains {
+                traits[traint] = true
+            }
+            return traits
+        }()
+        
+        self.enumerateAttributes(in: range) { currAttributes, _, _ in
+            guard let font = currAttributes[.font] as? UIFont else { return }
+            for traint in UIFontDescriptor.SymbolicTraits.allTrains {
+                    if font != font.adding(trait: traint) {
+                        trains[traint] = false
+                    }
+            }
+        }
+        return trains.filter({ $0.value == true }).map({ $0.key })
     }
 }

@@ -39,14 +39,12 @@ public class FontTraitToggleCommand: EditorCommand {
             editor.typingAttributes[.font] = font.toggled(trait: trait)
             return
         }
-
-        guard let initFont = selectedText.getActiveAttributes()![.font] as? UIFont else {
-            return
-        }
+        
+        let isAdding: Bool = selectedText.getActiveTraits()!.contains(trait)
 
         editor.attributedText.enumerateAttribute(.font, in: editor.selectedRange, options: .longestEffectiveRangeNotRequired) { font, range, _ in
             if let font = font as? UIFont {
-                let fontToApply = initFont.contains(trait: trait) ? font.removing(trait: trait) : font.adding(trait: trait)
+                let fontToApply = isAdding ? font.removing(trait: trait) : font.adding(trait: trait)
                 editor.addAttribute(.font, value: fontToApply, at: range)
             }
         }

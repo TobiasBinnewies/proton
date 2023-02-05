@@ -91,3 +91,28 @@ public extension UIFont {
         return UIFont(descriptor: updatedFontDescriptor, size: 0.0)
     }
 }
+
+extension UIFontDescriptor.SymbolicTraits: Hashable {
+    public static let allTrains = [
+        traitItalic,
+        traitBold,
+        traitExpanded,
+        traitCondensed,
+        traitMonoSpace,
+        traitVertical,
+        traitUIOptimized,
+        traitTightLeading,
+        traitLooseLeading,
+        classMask,
+        classOldStyleSerifs,
+        classTransitionalSerifs,
+        classModernSerifs,
+        classClarendonSerifs,
+        classSlabSerifs,
+        classFreeformSerifs,
+        classSansSerif,
+        classOrnamentals,
+        classScripts,
+        classSymbolic,
+    ]
+}
