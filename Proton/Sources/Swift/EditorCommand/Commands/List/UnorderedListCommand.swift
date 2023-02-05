@@ -15,7 +15,7 @@ public class UnorderedListCommand: ListCommand {
         return CommandName("unorderedListCommand")
     }
     
-    override func execute(on editor: EditorView) {
+    public override func execute(on editor: EditorView) {
         var attributeValue: String? = "listItemValue"
         // remove list if existing
         if editor.contentLength > 0,
