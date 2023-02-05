@@ -111,13 +111,4 @@ public class ListCommand: EditorCommand {
         editor.addAttribute(.listItem, value: attrValue, at: selectedRange)
         attributeValue = nil
     }
-
-    /// Executes the command with value of `attributeValue` for `.listItem` attribute.
-    /// - Parameters:
-    ///   - editor: Editor to execute the command on.
-    ///   - attributeValue: Value of `.listItem` attribute. Use nil to remove list formatting.
-    public func execute(on editor: EditorView, attributeValue: Any?) {
-        self.attributeValue = attributeValue
-        execute(on: editor)
-    }
 }

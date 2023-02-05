@@ -16,13 +16,14 @@ public class UnorderedListCommand: ListCommand {
     }
     
     public override func execute(on editor: EditorView) {
-        var attributeValue: String? = "listItemValue"
         // remove list if existing
         if editor.contentLength > 0,
            editor.attributedText.attribute(.listItem, at: min(editor.contentLength - 1, editor.selectedRange.location), effectiveRange: nil) != nil {
-            attributeValue = nil
+            self.attributeValue = nil
+        } else {
+            self.attributeValue = "listItemValue"
         }
         // create / remove list
-        super.execute(on: editor, attributeValue: attributeValue)
+        super.execute(on: editor)
     }
 }
