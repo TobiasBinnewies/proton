@@ -58,3 +58,5 @@ public struct SquareBulletSequenceGenerator: SequenceGenerator {
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
+
+//TODO: Erweitern!!

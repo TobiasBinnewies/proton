@@ -403,6 +403,16 @@ open class EditorView: UIView {
         get { richTextView.typingAttributes }
         set { richTextView.typingAttributes = newValue }
     }
+    
+    /// Gets all attributes that are present through the whole selected range,
+    /// if nothing is selected it returns the current `typingAttributes`.
+    public var selectedAttributes: [NSAttributedString.Key: Any] {
+        let selectedRange = richTextView.selectedRange
+        if selectedRange.isEmpty {
+            return richTextView.typingAttributes
+        }
+        return attributedText.getActiveAttributes(inRange: selectedRange)!
+    }
 
     /// An object interested in observing the changes in bounds of the `Editor`, typically an `Attachment`.
     public var boundsObserver: BoundsObserving? {

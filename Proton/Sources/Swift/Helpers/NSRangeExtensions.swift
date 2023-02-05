@@ -43,6 +43,10 @@ public extension NSRange {
     var endLocation: Int {
         return location + length
     }
+    
+    var isEmpty: Bool {
+        return self.upperBound == self.lowerBound
+    }
 
     /// Converts the range to `UITextRange` in given `UITextInput`. Returns nil if the range is invalid in the `UITextInput`.
     /// - Parameter textInput: UITextInput to convert the range in.

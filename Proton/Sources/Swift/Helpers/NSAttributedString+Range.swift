@@ -138,4 +138,45 @@ public extension NSAttributedString {
         }
         return (string as NSString).substring(with: range)
     }
+    
+    /// Gets all Attributes that are present through the whole range
+    /// - Parameter range: the range
+    /// - Returns: the attributes
+    func getActiveAttributes(inRange range: NSRange) -> [Key: Any]? {
+        if range.isEmpty {
+            return nil
+        }
+        var activeAttributes: [Key: Any] = [:]
+        var deletedAttributes: [Key: Any] = [:]
+//        var isBold = true
+//        var isItalic = true
+//        var occouringFontStyles: Set<UIFont.TextStyle?> = []
+        self.enumerateAttributes(in: range) { currAttributes, _, _ in
+            for attr in currAttributes {
+                if !deletedAttributes.keys.contains(where: {$0 == attr.key}) {
+                    if !activeAttributes.keys.contains(where: {$0 == attr.key}) || anyEquals(activeAttributes[attr.key]!, attr.value)
+                         {
+                        activeAttributes[attr.key] = attr.value
+                        continue
+                    }
+                    deletedAttributes[attr.key] = attr.value
+                    activeAttributes.removeValue(forKey: attr.key)
+                }
+            }
+        }
+        return activeAttributes
+    }
+    
+    private func anyEquals(_ x : Any, _ y : Any) -> Bool {
+        guard x is AnyHashable else {
+            return false
+            
+        }
+        guard y is AnyHashable else {
+            return false
+            
+        }
+        let isEqual = (x as! AnyHashable) == (y as! AnyHashable)
+        return isEqual
+    }
 }
