@@ -142,8 +142,9 @@ public extension NSAttributedString {
     /// Gets all Attributes that are present through the whole range
     /// - Parameter range: the range
     /// - Returns: the attributes
-    func getActiveAttributes(inRange range: NSRange) -> [Key: Any]? {
-        if range.isEmpty {
+    func getActiveAttributes(inRange: NSRange? = nil) -> [Key: Any]? {
+        let range = inRange ?? NSRange(location: 0, length: self.length)
+        if range.isEmpty || range.location < 0 || self.length < range.endLocation {
             return nil
         }
         var activeAttributes: [Key: Any] = [:]
