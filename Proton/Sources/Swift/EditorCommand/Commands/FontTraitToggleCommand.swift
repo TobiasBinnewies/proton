@@ -40,7 +40,7 @@ public class FontTraitToggleCommand: EditorCommand {
             return
         }
 
-        guard let initFont = selectedText.attribute(.font, at: 0, effectiveRange: nil) as? UIFont else {
+        guard let initFont = selectedText.getActiveAttributes(inRange: editor.selectedRange)![.font] as? UIFont else {
             return
         }
 
