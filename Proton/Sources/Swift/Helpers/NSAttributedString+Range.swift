@@ -168,19 +168,6 @@ public extension NSAttributedString {
         return activeAttributes
     }
     
-    private func anyEquals(_ x : Any, _ y : Any) -> Bool {
-        guard x is AnyHashable else {
-            return false
-            
-        }
-        guard y is AnyHashable else {
-            return false
-            
-        }
-        let isEqual = (x as! AnyHashable) == (y as! AnyHashable)
-        return isEqual
-    }
-    
     /// Gets all Traints  that are present in the font through the whole range
     /// - Parameter range: the range
     /// - Returns: the traints
@@ -207,4 +194,17 @@ public extension NSAttributedString {
         }
         return trains.filter({ $0.value == true }).map({ $0.key })
     }
+}
+
+func anyEquals(_ x : Any, _ y : Any) -> Bool {
+    guard x is AnyHashable else {
+        return false
+        
+    }
+    guard y is AnyHashable else {
+        return false
+        
+    }
+    let isEqual = (x as! AnyHashable) == (y as! AnyHashable)
+    return isEqual
 }

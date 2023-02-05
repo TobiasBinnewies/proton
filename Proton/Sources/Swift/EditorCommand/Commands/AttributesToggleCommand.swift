@@ -45,10 +45,20 @@ public class AttributesToggleCommand: EditorCommand {
             }
             return
         }
+        
+        let areAttributesFullActiveInSelectedText: Bool = {
+            let allActiveAttributes = selectedText.getActiveAttributes()!
+            for attribute in attributes {
+                if let activeAttributeValue = allActiveAttributes[attribute.key], anyEquals(activeAttributeValue, attribute.value) {
+                    return true
+                }
+            }
+            return false
+        }()
 
         attributes.forEach { attribute in
             editor.attributedText.enumerateAttribute(attribute.key, in: editor.selectedRange, options: .longestEffectiveRangeNotRequired) { attrValue, range, _ in
-                if attrValue == nil {
+                if !areAttributesFullActiveInSelectedText {
                     editor.addAttribute(attribute.key, value: attribute.value, at: range)
                 } else {
                     editor.removeAttribute(attribute.key, at: range)

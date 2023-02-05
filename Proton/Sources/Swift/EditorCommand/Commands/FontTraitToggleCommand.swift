@@ -40,11 +40,11 @@ public class FontTraitToggleCommand: EditorCommand {
             return
         }
         
-        let isAdding: Bool = selectedText.getActiveTraits()!.contains(trait)
+        let isTraintFullActiveInSelectedText: Bool = selectedText.getActiveTraits()!.contains(trait)
 
         editor.attributedText.enumerateAttribute(.font, in: editor.selectedRange, options: .longestEffectiveRangeNotRequired) { font, range, _ in
             if let font = font as? UIFont {
-                let fontToApply = isAdding ? font.removing(trait: trait) : font.adding(trait: trait)
+                let fontToApply = isTraintFullActiveInSelectedText ? font.removing(trait: trait) : font.adding(trait: trait)
                 editor.addAttribute(.font, value: fontToApply, at: range)
             }
         }
