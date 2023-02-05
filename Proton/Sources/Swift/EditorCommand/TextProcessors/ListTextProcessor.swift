@@ -179,9 +179,9 @@ public class ListTextProcessor: TextProcessing {
                 }
             }
             // exit indentation if the resulting indentation is more than 1 level indent points
-//            else if (mutableStyle?.firstLineHeadIndent ?? 0) > editor.listLineFormatting.indentation {
-//                return
-//            }
+            else if (mutableStyle?.firstLineHeadIndent ?? 0) > editor.listLineFormatting.indentation {
+                return
+            }
 
             editor.addAttribute(.paragraphStyle, value: mutableStyle ?? editor.paragraphStyle, at: line.range)
 
