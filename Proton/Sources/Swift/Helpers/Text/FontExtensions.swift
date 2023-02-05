@@ -80,10 +80,30 @@ public extension UIFont {
 
         return UIFont(descriptor: updatedFontDescriptor, size: 0.0)
     }
+    
+    func adding(traits: [UIFontDescriptor.SymbolicTraits]) -> UIFont {
+        var prevTraits = self.traits
+        traits.forEach { trait in
+            prevTraits.formUnion(trait)
+        }
+        guard let updatedFontDescriptor = fontDescriptor.withSymbolicTraits(prevTraits) else {
+            return self
+        }
+
+        return UIFont(descriptor: updatedFontDescriptor, size: 0.0)
+    }
 
     func removing(trait: UIFontDescriptor.SymbolicTraits) -> UIFont {
         var traits = self.traits
         traits.subtract(trait)
+        guard let updatedFontDescriptor = fontDescriptor.withSymbolicTraits(traits) else {
+            return self
+        }
+
+        return UIFont(descriptor: updatedFontDescriptor, size: 0.0)
+    }
+    
+    func withTraints(traits: UIFontDescriptor.SymbolicTraits) -> UIFont {
         guard let updatedFontDescriptor = fontDescriptor.withSymbolicTraits(traits) else {
             return self
         }

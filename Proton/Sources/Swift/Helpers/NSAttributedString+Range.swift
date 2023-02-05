@@ -156,8 +156,18 @@ public extension NSAttributedString {
         self.enumerateAttributes(in: range) { currAttributes, _, _ in
             for attr in currAttributes {
                 if !deletedAttributes.contains(attr.key) {
-                    if idx == 0 || (activeAttributes.keys.contains(attr.key) && anyEquals(activeAttributes[attr.key]!, attr.value)) {
+                    if idx == 0 {
                         activeAttributes[attr.key] = attr.value
+                        continue
+                    }
+                    if attr.key == .font, let font = attr.value as? UIFont {
+                        var activeTraits = (activeAttributes[.font]! as! UIFont).traits
+                        var intersectingTraits = activeTraits.intersection(font.traits)
+                        
+                        activeAttributes[.font] = font.withTraints(traits: intersectingTraits)
+                        continue
+                    }
+                    if activeAttributes.keys.contains(attr.key), anyEquals(activeAttributes[attr.key]!, attr.value) {
                         continue
                     }
                     deletedAttributes.append(attr.key)
