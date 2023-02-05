@@ -148,20 +148,19 @@ public extension NSAttributedString {
             return nil
         }
         var activeAttributes: [Key: Any] = [:]
-        var deletedAttributes: [Key: Any] = [:]
+        var deletedAttributes: [Key] = []
         var idx: Int = 0
 //        var isBold = true
 //        var isItalic = true
 //        var occouringFontStyles: Set<UIFont.TextStyle?> = []
         self.enumerateAttributes(in: range) { currAttributes, _, _ in
             for attr in currAttributes {
-                if !deletedAttributes.keys.contains(attr.key) {
-                    if (idx == 0 && !activeAttributes.keys.contains(attr.key)) || anyEquals(activeAttributes[attr.key]!, attr.value)
-                         {
+                if !deletedAttributes.contains(attr.key) {
+                    if idx == 0 || (activeAttributes.keys.contains(attr.key) && anyEquals(activeAttributes[attr.key]!, attr.value)) {
                         activeAttributes[attr.key] = attr.value
                         continue
                     }
-                    deletedAttributes[attr.key] = attr.value
+                    deletedAttributes.append(attr.key)
                     activeAttributes.removeValue(forKey: attr.key)
                 }
             }
