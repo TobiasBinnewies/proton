@@ -79,7 +79,4 @@ public extension NSAttributedString.Key {
     /// `.lockedAttributes: [NSAttributedString.Key.backgroundStyle]`
     /// `], at: editor.selectedRange)`
     static let lockedAttributes = NSAttributedString.Key("_lockedAttributes")
-    
-    /// Setting a preferredFont, takes `UIFont.TextStyle`
-    static let fontStyle = NSAttributedString.Key("_fontStyle")
 }

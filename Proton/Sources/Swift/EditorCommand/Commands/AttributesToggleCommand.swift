@@ -35,7 +35,7 @@ public class AttributesToggleCommand: EditorCommand {
         let selectedText = editor.selectedText
         if editor.isEmpty || editor.selectedRange == .zero || selectedText.length == 0 {
             attributes.forEach { attribute in
-                if attribute.key == .font || attribute.key == .fontStyle {
+                if attribute.key == .font {
                     editor.typingAttributes[.font] = attribute.value
                     return
                 }
@@ -50,16 +50,23 @@ public class AttributesToggleCommand: EditorCommand {
             return
         }
         
-        let allActiveAttributes = selectedText.getActiveAttributes()!
+        let areAttributesFullActiveInSelectedText: Bool = {
+            let allActiveAttributes = selectedText.getActiveAttributes()!
+            for attribute in attributes {
+                if let activeAttributeValue = allActiveAttributes[attribute.key], anyEquals(activeAttributeValue, attribute.value) {
+                    return true
+                }
+            }
+            return false
+        }()
 
         attributes.forEach { attribute in
             editor.attributedText.enumerateAttribute(attribute.key, in: editor.selectedRange, options: .longestEffectiveRangeNotRequired) { attrValue, range, _ in
-                
-                if let activeAttributeValue = allActiveAttributes[attribute.key], anyEquals(activeAttributeValue, attribute.value) {
-                    if attribute.key == .font || attribute.key == .fontStyle { return }
-                    editor.removeAttribute(attribute.key, at: range)
-                } else {
+                if !areAttributesFullActiveInSelectedText {
                     editor.addAttribute(attribute.key, value: attribute.value, at: range)
+                } else {
+                    if attribute.key == .font { return }
+                    editor.removeAttribute(attribute.key, at: range)
                 }
             }
         }
