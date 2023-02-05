@@ -61,6 +61,7 @@ public class AttributesToggleCommand: EditorCommand {
                 if !areAttributesFullActiveInSelectedText {
                     editor.addAttribute(attribute.key, value: attribute.value, at: range)
                 } else {
+                    if attribute.key == .font { return }
                     editor.removeAttribute(attribute.key, at: range)
                 }
             }
