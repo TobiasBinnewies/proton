@@ -21,8 +21,8 @@
 import Foundation
 import ProtonCore
 
-/// Represents an item in the list. This structure may be used to create `NSAttributedString` from items in an array of `ListParserItem`. Alternatively, `NSAttributedString` may also be parsed to get an array of `ListParserItem`s.
-public struct ListParserItem {
+/// Represents an item in the list. This structure may be used to create `NSAttributedString` from items in an array of `ListItem`. Alternatively, `NSAttributedString` may also be parsed to get an array of `ListItem`s.
+public struct ListItem {
 
     /// Text of the list item. All attributes are preserved as is.
     /// - Note: If the text contains a newline (`\n`), it is preserved as a newline in text by applying `.skipNextListMarker` attribute.
@@ -35,7 +35,7 @@ public struct ListParserItem {
     public let attributeValue: Any
 }
 
-/// Provides helper function to convert between `NSAttributedString` and `[ListParserItem]`
+/// Provides helper function to convert between `NSAttributedString` and `[ListItem]`
 public struct ListParser {
 
     /// Parses an array of list items into an `NSAttributedString` representation. `NewLines` are automatically added between each list item in the attributed string representation.
@@ -43,7 +43,7 @@ public struct ListParser {
     ///   - list: List items to convert
     ///   - indent: Indentation to be used. This determines the paragraph indentation for layout.
     /// - Returns: NSAttributedString representation of list items
-    public static func parse(list: [ListParserItem], indent: CGFloat) -> NSAttributedString {
+    public static func parse(list: [ListItem], indent: CGFloat) -> NSAttributedString {
         let attributedString = NSMutableAttributedString()
         for i in 0..<list.count {
             let item = list[i]
@@ -80,8 +80,8 @@ public struct ListParser {
     ///   - indent: Indentation used in list representation in attributedString. This determines the level of list item.
     /// - Returns: Array of list items with corresponding range in attributedString
     /// - Note: If NSAttributedString passed into the function is non continuous i.e. contains multiple lists, the array will contain items from all the list with the range corresponding to range of text in original attributed string.
-    public static func parse(attributedString: NSAttributedString, indent: CGFloat = 25) -> [(range: NSRange, listItem: ListParserItem)] {
-        var items = [(range: NSRange, listItem: ListParserItem)]()
+    public static func parse(attributedString: NSAttributedString, indent: CGFloat = 25) -> [(range: NSRange, listItem: ListItem)] {
+        var items = [(range: NSRange, listItem: ListItem)]()
         attributedString.enumerateAttribute(.listItem, in: attributedString.fullRange, options: []) { (value, range, _) in
             if value != nil {
                 items.append(contentsOf: parseList(in: attributedString.attributedSubstring(from: range), rangeInOriginalString: range, indent: indent, attributeValue: value))
@@ -90,8 +90,8 @@ public struct ListParser {
         return items
     }
 
-    private static func parseList(in attributedString: NSAttributedString, rangeInOriginalString: NSRange, indent: CGFloat, attributeValue: Any?) -> [(range: NSRange, listItem: ListParserItem)] {
-        var items = [(range: NSRange, listItem: ListParserItem)]()
+    private static func parseList(in attributedString: NSAttributedString, rangeInOriginalString: NSRange, indent: CGFloat, attributeValue: Any?) -> [(range: NSRange, listItem: ListItem)] {
+        var items = [(range: NSRange, listItem: ListItem)]()
 
         attributedString.enumerateAttribute(.paragraphStyle, in: attributedString.fullRange, options: []) { paraAttribute, paraRange, _ in
             if let paraStyle = paraAttribute as? NSParagraphStyle {
@@ -111,12 +111,12 @@ public struct ListParser {
                        text.attributeValue(for: .skipNextListMarker, at: newlineRange.location) != nil,
                        var lastItem = items.last {
                         lastItem.range = NSRange(location: lastItem.range.location, length: itemRange.endLocation)
-                        lastItem.listItem = ListParserItem(text: text.attributedSubstring(from: lastItem.range), level: level, attributeValue: attributeValue as Any)
+                        lastItem.listItem = ListItem(text: text.attributedSubstring(from: lastItem.range), level: level, attributeValue: attributeValue as Any)
                         items.remove(at: items.count - 1)
                         items.append((range: lastItem.range.shiftedBy(rangeInOriginalString.location), listItem: lastItem.listItem))
                     } else {
                         let listLine = text.attributedSubstring(from: itemRange)
-                        let item = ListParserItem(text: listLine, level: level, attributeValue: attributeValue as Any)
+                        let item = ListItem(text: listLine, level: level, attributeValue: attributeValue as Any)
                         items.append((itemRange.shiftedBy(rangeInOriginalString.location), item))
                     }
                     start += line.string.count + 1 // + 1 to account for \n

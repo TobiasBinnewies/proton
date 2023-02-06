@@ -77,17 +77,6 @@ class LayoutManager: NSLayoutManager {
             counters = [:]
         }
 
-        // Set correct Paragraph Style
-        textStorage.enumerateAttribute(.listItem, in: listRange, options: []) { value, range, _ in
-            guard let value = value as? ListItem else { return }
-            let levelToSet = value.indent
-            let indentation = CGFloat(levelToSet) * listIndent
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.firstLineHeadIndent = indentation
-            paraStyle.headIndent = indentation
-            textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: range)
-        }
-        
 //        var levelToSet = 0
 //        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
 //            levelToSet = 0
