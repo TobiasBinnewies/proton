@@ -46,7 +46,7 @@ class LayoutManager: NSLayoutManager {
         guard let textStorage = self.textStorage else { return }
 
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
-            if value != nil {
+            if let value = value as? ListItem {
                 drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
             }
         }
@@ -56,7 +56,7 @@ class LayoutManager: NSLayoutManager {
         return layoutManagerDelegate?.paragraphStyle ?? NSParagraphStyle()
     }
 
-    private func drawListMarkers(textStorage: NSTextStorage, listRange: NSRange, attributeValue: Any?) {
+    private func drawListMarkers(textStorage: NSTextStorage, listRange: NSRange, attributeValue: ListItem) {
         var lastLayoutRect: CGRect?
         var lastLayoutParaStyle: NSParagraphStyle?
         var lastLayoutFont: UIFont?
@@ -78,15 +78,12 @@ class LayoutManager: NSLayoutManager {
         }
 
         // Set correct Paragraph Style
-        textStorage.enumerateAttribute(.listItem, in: listRange, options: []) { value, range, _ in
-            guard let value = value as? ListItem else { return }
-            let levelToSet = value.indent
-            let indentation = CGFloat(levelToSet) * listIndent
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.firstLineHeadIndent = indentation
-            paraStyle.headIndent = indentation
-            textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: range)
-        }
+        let levelToSet = attributeValue.indent
+        let indentation = CGFloat(levelToSet) * listIndent
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.firstLineHeadIndent = indentation
+        paraStyle.headIndent = indentation
+        textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: listRange)
         
 //        var levelToSet = 0
 //        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
