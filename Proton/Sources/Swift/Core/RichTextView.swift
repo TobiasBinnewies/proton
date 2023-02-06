@@ -51,18 +51,13 @@ class RichTextView: AutogrowingTextView {
 
     var defaultTypingAttributes: RichTextAttributes {
         return [
-            .font: defaultFont,
-            .paragraphStyle: defaultParagraphStyle,
-            .foregroundColor: defaultTextColor
+            .font: defaultTextFormattingProvider?.font ?? richTextStorage.defaultFont,
+            .paragraphStyle: defaultTextFormattingProvider?.paragraphStyle ?? richTextStorage.defaultParagraphStyle,
+            .foregroundColor: defaultTextFormattingProvider?.textColor ?? richTextStorage.defaultTextColor
         ]
     }
-    var defaultFont: UIFont { defaultTextFormattingProvider?.font ?? richTextStorage.defaultFont
-    }
-    var defaultParagraphStyle: NSParagraphStyle {
-        defaultTextFormattingProvider?.paragraphStyle ?? richTextStorage.defaultParagraphStyle
-    }
-    var defaultTextColor: UIColor { defaultTextFormattingProvider?.textColor ?? richTextStorage.defaultTextColor
-    }
+    var defaultFont: UIFont { richTextStorage.defaultFont }
+    var defaultTextColor: UIColor { richTextStorage.defaultTextColor }
     var defaultBackgroundColor: UIColor {
         if #available(iOS 13.0, *) {
             return .systemBackground
@@ -619,7 +614,7 @@ extension RichTextView: LayoutManagerDelegate {
     }
 
     var paragraphStyle: NSMutableParagraphStyle? {
-        return defaultParagraphStyle as? NSMutableParagraphStyle ?? defaultTextFormattingProvider?.paragraphStyle
+        return defaultTextFormattingProvider?.paragraphStyle
     }
 
     func listMarkerForItem(at index: Int, level: Int, previousLevel: Int, attributeValue: Any?) -> ListLineMarker {
