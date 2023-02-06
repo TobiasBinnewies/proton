@@ -78,12 +78,12 @@ class LayoutManager: NSLayoutManager {
         }
 
         // Set correct Paragraph Style
-        let levelToSet = attributeValue.indent
-        let indentation = CGFloat(levelToSet) * listIndent
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.firstLineHeadIndent = indentation
-        paraStyle.headIndent = indentation
-        textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: listRange)
+//        let levelToSet = attributeValue.indent
+//        let indentation = CGFloat(levelToSet) * listIndent
+//        let paraStyle = NSMutableParagraphStyle()
+//        paraStyle.firstLineHeadIndent = indentation
+//        paraStyle.headIndent = indentation
+//        textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: listRange)
         
 //        var levelToSet = 0
 //        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
