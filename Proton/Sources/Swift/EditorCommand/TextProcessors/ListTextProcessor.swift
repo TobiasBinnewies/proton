@@ -162,10 +162,12 @@ public class ListTextProcessor: TextProcessing {
         let lines = editor.contentLinesInRange(editedRange)
 
         for line in lines {
-//            if line.text.length == 0 || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
-//                createListItemInANewLine(editor: editor, editedRange: line.range, indentMode: indentMode, attributeValue: attributeValue)
-//                continue
-//            }
+            if line.text.length == 0
+//                || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil
+            {
+                createListItemInANewLine(editor: editor, editedRange: line.range, indentMode: indentMode, attributeValue: attributeValue)
+                continue
+            }
 
             let paraStyle = line.text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle
             let mutableStyle = updatedParagraphStyle(paraStyle: paraStyle,  listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
