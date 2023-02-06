@@ -36,11 +36,11 @@ protocol LayoutManagerDelegate: AnyObject {
 
 class LayoutManager: NSLayoutManager {
 
-    private let defaultBulletColor = UIColor.black
+    private let defaultBulletColor: UIColor = UIColor.black
     private var counters = [Int: Int]()
 
     weak var layoutManagerDelegate: LayoutManagerDelegate?
-
+    
     override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
         guard let textStorage = self.textStorage else { return }
@@ -77,25 +77,25 @@ class LayoutManager: NSLayoutManager {
             counters = [:]
         }
 
-        var levelToSet = 0
-        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
-            levelToSet = 0
-            if let paraStyle = (value as? NSParagraphStyle)?.mutableParagraphStyle {
-                let previousLevel = Int(prevStyle?.firstLineHeadIndent ?? 0)/Int(listIndent)
-                let currentLevel = Int(paraStyle.firstLineHeadIndent)/Int(listIndent)
-
-                if currentLevel - previousLevel > 1 {
-                    levelToSet = previousLevel + 1
-                    let indentation = CGFloat(levelToSet) * listIndent
-                    paraStyle.firstLineHeadIndent = indentation
-                    paraStyle.headIndent = indentation
-                    textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: range)
-                    prevStyle = paraStyle
-                } else {
-                    prevStyle = value as? NSParagraphStyle
-                }
-            }
-        }
+//        var levelToSet = 0
+//        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
+//            levelToSet = 0
+//            if let paraStyle = (value as? NSParagraphStyle)?.mutableParagraphStyle {
+//                let previousLevel = Int(prevStyle?.firstLineHeadIndent ?? 0)/Int(listIndent)
+//                let currentLevel = Int(paraStyle.firstLineHeadIndent)/Int(listIndent)
+//
+//                if currentLevel - previousLevel > 1 {
+//                    levelToSet = previousLevel + 1
+//                    let indentation = CGFloat(levelToSet) * listIndent
+//                    paraStyle.firstLineHeadIndent = indentation
+//                    paraStyle.headIndent = indentation
+//                    textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: range)
+//                    prevStyle = paraStyle
+//                } else {
+//                    prevStyle = value as? NSParagraphStyle
+//                }
+//            }
+//        }
 
         let listGlyphRange = glyphRange(forCharacterRange: listRange, actualCharacterRange: nil)
         enumerateLineFragments(forGlyphRange: listGlyphRange) { [weak self] (rect, usedRect, textContainer, glyphRange, stop) in
