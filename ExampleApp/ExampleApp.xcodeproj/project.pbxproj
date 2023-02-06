@@ -3,12 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B0EA92C270432C200328468 /* ProtonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0EA92B270432C200328468 /* ProtonCore.framework */; };
-		1B0EA92D270432CC00328468 /* ProtonCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1B0EA92B270432C200328468 /* ProtonCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1B164F2E23D282A500A0869A /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B164F2923D282A500A0869A /* JSONDecoder.swift */; };
 		1B164F2F23D282A500A0869A /* PanelDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B164F2B23D282A500A0869A /* PanelDecoder.swift */; };
 		1B164F3023D282A500A0869A /* TextDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B164F2C23D282A500A0869A /* TextDecoder.swift */; };
@@ -50,18 +48,17 @@
 		1B91F4B623C73D01003F9B55 /* TypeaheadTextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B91F4B523C73D01003F9B55 /* TypeaheadTextProcessor.swift */; };
 		1B91F4B823C73D3C003F9B55 /* MarkupTextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B91F4B723C73D3C003F9B55 /* MarkupTextProcessor.swift */; };
 		1B91F4BA23C73D96003F9B55 /* TextProcessorExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B91F4B923C73D96003F9B55 /* TextProcessorExampleViewController.swift */; };
-		1BB8904223C5A74700F087AE /* Proton.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFFEF0223C3048E00D2BA35 /* Proton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1BD1BE72289745D800FA8AE4 /* GridViewAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD1BE71289745D800FA8AE4 /* GridViewAttachment.swift */; };
 		1BD1BE78289746C900FA8AE4 /* CreateGridViewCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD1BE77289746C900FA8AE4 /* CreateGridViewCommand.swift */; };
 		1BD993C223CA8FD200563ACB /* PanelAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD993C123CA8FD200563ACB /* PanelAttachment.swift */; };
 		1BFFEEFE23C2D3E500D2BA35 /* MatchContentAttachmentExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEEFD23C2D3E500D2BA35 /* MatchContentAttachmentExampleViewController.swift */; };
 		1BFFEF0023C303F100D2BA35 /* AutogrowingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEEFF23C303F100D2BA35 /* AutogrowingTextField.swift */; };
-		1BFFEF0323C3048E00D2BA35 /* Proton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BFFEF0223C3048E00D2BA35 /* Proton.framework */; };
 		1BFFEF0723C30B8E00D2BA35 /* FullWidthAttachmentExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF0623C30B8E00D2BA35 /* FullWidthAttachmentExampleViewController.swift */; };
 		1BFFEF0A23C30C9900D2BA35 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF0923C30C9900D2BA35 /* PanelView.swift */; };
 		1BFFEF0E23C3228900D2BA35 /* FixedWidthAttachmentExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF0D23C3228900D2BA35 /* FixedWidthAttachmentExampleViewController.swift */; };
 		1BFFEF1023C32B5A00D2BA35 /* WidthRangeAttachmentExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF0F23C32B5A00D2BA35 /* WidthRangeAttachmentExampleViewController.swift */; };
 		1BFFEF1223C3310A00D2BA35 /* PercentWidthAttachmentExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF1123C3310A00D2BA35 /* PercentWidthAttachmentExampleViewController.swift */; };
+		4D120F8D298F0F200090FA89 /* Proton in Frameworks */ = {isa = PBXBuildFile; productRef = 4D120F8C298F0F200090FA89 /* Proton */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,8 +85,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1B0EA92D270432CC00328468 /* ProtonCore.framework in Copy Frameworks */,
-				1BB8904223C5A74700F087AE /* Proton.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,7 +92,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1B0EA92B270432C200328468 /* ProtonCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ProtonCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B164F2923D282A500A0869A /* JSONDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		1B164F2B23D282A500A0869A /* PanelDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDecoder.swift; sourceTree = "<group>"; };
 		1B164F2C23D282A500A0869A /* TextDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextDecoder.swift; sourceTree = "<group>"; };
@@ -143,7 +137,6 @@
 		1B6DE9DD23C598F1007F9859 /* CommandsExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandsExampleViewController.swift; sourceTree = "<group>"; };
 		1B6DE9E023C59A16007F9859 /* PanelCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelCommand.swift; sourceTree = "<group>"; };
 		1B872B9E23EE73170070A92A /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
-		1B8D81FF243F3221009AD38A /* ProtonExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ProtonExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B91F4B523C73D01003F9B55 /* TypeaheadTextProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeaheadTextProcessor.swift; sourceTree = "<group>"; };
 		1B91F4B723C73D3C003F9B55 /* MarkupTextProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextProcessor.swift; sourceTree = "<group>"; };
 		1B91F4B923C73D96003F9B55 /* TextProcessorExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProcessorExampleViewController.swift; sourceTree = "<group>"; };
@@ -152,7 +145,6 @@
 		1BD993C123CA8FD200563ACB /* PanelAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelAttachment.swift; sourceTree = "<group>"; };
 		1BFFEEFD23C2D3E500D2BA35 /* MatchContentAttachmentExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchContentAttachmentExampleViewController.swift; sourceTree = "<group>"; };
 		1BFFEEFF23C303F100D2BA35 /* AutogrowingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutogrowingTextField.swift; sourceTree = "<group>"; };
-		1BFFEF0223C3048E00D2BA35 /* Proton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Proton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BFFEF0623C30B8E00D2BA35 /* FullWidthAttachmentExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullWidthAttachmentExampleViewController.swift; sourceTree = "<group>"; };
 		1BFFEF0923C30C9900D2BA35 /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
 		1BFFEF0D23C3228900D2BA35 /* FixedWidthAttachmentExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedWidthAttachmentExampleViewController.swift; sourceTree = "<group>"; };
@@ -165,8 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BFFEF0323C3048E00D2BA35 /* Proton.framework in Frameworks */,
-				1B0EA92C270432C200328468 /* ProtonCore.framework in Frameworks */,
+				4D120F8D298F0F200090FA89 /* Proton in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +259,6 @@
 				1B6D2FE623BD46F20019CE40 /* ExampleAppTests */,
 				1B6D2FF123BD46F20019CE40 /* ExampleAppUITests */,
 				1B6D2FCE23BD46ED0019CE40 /* Products */,
-				1BFFEF0123C3048E00D2BA35 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -383,16 +373,6 @@
 			path = Attachments;
 			sourceTree = "<group>";
 		};
-		1BFFEF0123C3048E00D2BA35 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				1B0EA92B270432C200328468 /* ProtonCore.framework */,
-				1B8D81FF243F3221009AD38A /* ProtonExtensions.framework */,
-				1BFFEF0223C3048E00D2BA35 /* Proton.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		1BFFEF0823C30C7600D2BA35 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -423,6 +403,9 @@
 			dependencies = (
 			);
 			name = ExampleApp;
+			packageProductDependencies = (
+				4D120F8C298F0F200090FA89 /* Proton */,
+			);
 			productName = ExampleApp;
 			productReference = 1B6D2FCD23BD46ED0019CE40 /* ExampleApp.app */;
 			productType = "com.apple.product-type.application";
@@ -495,6 +478,9 @@
 				Base,
 			);
 			mainGroup = 1B6D2FC423BD46ED0019CE40;
+			packageReferences = (
+				4D120F8B298F0F200090FA89 /* XCRemoteSwiftPackageReference "proton" */,
+			);
 			productRefGroup = 1B6D2FCE23BD46ED0019CE40 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -920,6 +906,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4D120F8B298F0F200090FA89 /* XCRemoteSwiftPackageReference "proton" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TobiasBinnewies/proton";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D120F8C298F0F200090FA89 /* Proton */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D120F8B298F0F200090FA89 /* XCRemoteSwiftPackageReference "proton" */;
+			productName = Proton;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1B6D2FC523BD46ED0019CE40 /* Project object */;
 }

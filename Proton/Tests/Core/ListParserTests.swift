@@ -175,11 +175,11 @@ class ListParserTests: XCTestCase {
     }
 
     func testParsesSingleLevelListToString() {
-        var list = [ListItem]()
+        var list = [ListParserItem]()
         let paraStyle = NSMutableParagraphStyle.forListLevel(1)
-        list.append(ListItem(text: NSAttributedString(string: "Item 1"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 2"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 1"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 2"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
 
         let text = ListParser.parse(list: list, indent: 25)
         let expectedString = NSMutableAttributedString(string: "Item 1", attributes: [NSAttributedString.Key.paragraphStyle: paraStyle])
@@ -198,15 +198,15 @@ class ListParserTests: XCTestCase {
     }
 
     func testParsesMultiLevelListToString() {
-        var list = [ListItem]()
+        var list = [ListParserItem]()
         let paraStyle1 = NSMutableParagraphStyle.forListLevel(1)
         let paraStyle2 = NSMutableParagraphStyle.forListLevel(2)
         let paraStyle3 = NSMutableParagraphStyle.forListLevel(3)
 
-        list.append(ListItem(text: NSAttributedString(string: "Item 1"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 2"), level: 2, attributeValue: 2))
-        list.append(ListItem(text: NSAttributedString(string: "Item 3"), level: 3, attributeValue: 3))
-        list.append(ListItem(text: NSAttributedString(string: "Item 4"), level: 1, attributeValue: 4))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 1"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 2"), level: 2, attributeValue: 2))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 3"), level: 3, attributeValue: 3))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 4"), level: 1, attributeValue: 4))
 
         let text = ListParser.parse(list: list, indent: 25)
         let expectedString = NSMutableAttributedString(string: "Item 1", attributes: [
@@ -245,10 +245,10 @@ class ListParserTests: XCTestCase {
     }
 
     func testParsesListWithSkipListMarkerToString() {
-        var list = [ListItem]()
+        var list = [ListParserItem]()
         let paraStyle = NSMutableParagraphStyle.forListLevel(1)
-        list.append(ListItem(text: NSAttributedString(string: "Item 1\nItem2"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 1\nItem2"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
 
         let text = ListParser.parse(list: list, indent: 25)
         let expectedString = NSMutableAttributedString(string: "Item 1\nItem2", attributes: [NSAttributedString.Key.paragraphStyle: paraStyle])
@@ -263,13 +263,13 @@ class ListParserTests: XCTestCase {
     }
 
     func testFullCircle() {
-        var list = [ListItem]()
+        var list = [ListParserItem]()
 
         let indent: CGFloat = 50
 
-        list.append(ListItem(text: NSAttributedString(string: "Item 1\nItem2"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
-        list.append(ListItem(text: NSAttributedString(string: "Item 31"), level: 2, attributeValue: 2))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 1\nItem2"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 3"), level: 1, attributeValue: 1))
+        list.append(ListParserItem(text: NSAttributedString(string: "Item 31"), level: 2, attributeValue: 2))
 
         let text = ListParser.parse(list: list, indent: indent)
         let parsedList = ListParser.parse(attributedString: text, indent: 50)

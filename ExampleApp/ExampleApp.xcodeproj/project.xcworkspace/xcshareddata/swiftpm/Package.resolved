@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "proton",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TobiasBinnewies/proton",
+      "state" : {
+        "branch" : "main",
+        "revision" : "809d1c22fc86e38beedebb011a684e2eac902894"
+      }
+    }
+  ],
+  "version" : 2
+}

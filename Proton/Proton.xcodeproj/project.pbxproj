@@ -132,6 +132,10 @@
 		1BFFEF1C23C334D200D2BA35 /* InlineEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF1B23C334D200D2BA35 /* InlineEditorView.swift */; };
 		1BFFEF1F23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF1E23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift */; };
 		1BFFEF2123C33EA900D2BA35 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF2023C33EA900D2BA35 /* PanelView.swift */; };
+		4D120F96298FFC880090FA89 /* FontStyleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F95298FFC880090FA89 /* FontStyleCommand.swift */; };
+		4D120F9B299029690090FA89 /* UnorderedListCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9A299029690090FA89 /* UnorderedListCommand.swift */; };
+		4D120F9D29902A3E0090FA89 /* OrderedListCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */; };
+		4D120F9F299184EA0090FA89 /* ListAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9E299184EA0090FA89 /* ListAttribute.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,6 +297,10 @@
 		1BFFEF1B23C334D200D2BA35 /* InlineEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineEditorView.swift; sourceTree = "<group>"; };
 		1BFFEF1E23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentOffsetProvider.swift; sourceTree = "<group>"; };
 		1BFFEF2023C33EA900D2BA35 /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
+		4D120F95298FFC880090FA89 /* FontStyleCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyleCommand.swift; sourceTree = "<group>"; };
+		4D120F9A299029690090FA89 /* UnorderedListCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnorderedListCommand.swift; sourceTree = "<group>"; };
+		4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderedListCommand.swift; sourceTree = "<group>"; };
+		4D120F9E299184EA0090FA89 /* ListAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAttribute.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -512,6 +520,7 @@
 				1B91E7B026AA685E0002DF45 /* AttributesToggleCommand.swift */,
 				1B91E7B426AA697C0002DF45 /* UnderlineCommand.swift */,
 				1B91E7B826AA698A0002DF45 /* StrikethroughCommand.swift */,
+				4D120F95298FFC880090FA89 /* FontStyleCommand.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -642,6 +651,7 @@
 				1B45CDBD23BF125D001EB196 /* NSAttributedString+ContentTypes.swift */,
 				1BD21555246952370000BCE2 /* BackgroundStyle.swift */,
 				1B4B60CE247FC86A002B63CF /* NSParagraphStyleExtensions.swift */,
+				4D120F9E299184EA0090FA89 /* ListAttribute.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -684,6 +694,8 @@
 				1B4B60C9247FC51E002B63CF /* ListCommand.swift */,
 				1BD18580284861F7001F4FBC /* ListIndentCommand.swift */,
 				1BD18582284863A6001F4FBC /* ListOutdentCommand.swift */,
+				4D120F9A299029690090FA89 /* UnorderedListCommand.swift */,
+				4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -957,6 +969,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D120F9F299184EA0090FA89 /* ListAttribute.swift in Sources */,
 				1B238D6E2456A40200BF49D5 /* NullRichTextEditorContext.swift in Sources */,
 				1B45CDBE23BF125D001EB196 /* NSAttributedString+ContentTypes.swift in Sources */,
 				1B7A985723C4828A00C34B14 /* RichTextEditorContext.swift in Sources */,
@@ -1008,10 +1021,13 @@
 				1B7C76AA2608A489006618AC /* FontTraitToggleCommand.swift in Sources */,
 				1B164F4123D2A4AB00A0869A /* String+NSRange.swift in Sources */,
 				1B45CDDF23C053FB001EB196 /* EditorContentIdentifying.swift in Sources */,
+				4D120F96298FFC880090FA89 /* FontStyleCommand.swift in Sources */,
 				1B45CDD523C00927001EB196 /* EditorContent.swift in Sources */,
 				1B975AFD23CD40D200EC410C /* RichTextRendererContext.swift in Sources */,
 				1B91E7B126AA685E0002DF45 /* AttributesToggleCommand.swift in Sources */,
 				1B45CDBC23BF1174001EB196 /* Types.swift in Sources */,
+				4D120F9B299029690090FA89 /* UnorderedListCommand.swift in Sources */,
+				4D120F9D29902A3E0090FA89 /* OrderedListCommand.swift in Sources */,
 				1B82571223C5799C0033A0A9 /* FontExtensions.swift in Sources */,
 				1B45CDE423C05916001EB196 /* SelectionView.swift in Sources */,
 				1B30A3602489CE3E00FA1D48 /* ListFormattingProvider.swift in Sources */,
@@ -1245,6 +1261,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1274,6 +1291,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1297,7 +1315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/Build/**";
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1318,7 +1336,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/Build/**";
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1344,7 +1362,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ProtonCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1369,7 +1387,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ProtonCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
