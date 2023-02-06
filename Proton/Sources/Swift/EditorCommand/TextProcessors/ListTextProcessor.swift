@@ -162,22 +162,22 @@ public class ListTextProcessor: TextProcessing {
         let lines = editor.contentLinesInRange(editedRange)
 
         for line in lines {
-            if line.text.length == 0 || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
-                createListItemInANewLine(editor: editor, editedRange: line.range, indentMode: indentMode, attributeValue: attributeValue)
-                continue
-            }
+//            if line.text.length == 0 || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
+//                createListItemInANewLine(editor: editor, editedRange: line.range, indentMode: indentMode, attributeValue: attributeValue)
+//                continue
+//            }
 
             let paraStyle = line.text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle
             let mutableStyle = updatedParagraphStyle(paraStyle: paraStyle,  listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
 
             let previousLine = editor.previousContentLine(from: line.range.location)
-            if let previousLine = previousLine,
-               previousLine.text.length > 0 {
-                let previousStyle = previousLine.text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle
-                guard mutableStyle?.firstLineHeadIndent ?? 0 <= (previousStyle?.firstLineHeadIndent ?? 0) + editor.listLineFormatting.indentation else {
-                    return
-                }
-            }
+//            if let previousLine = previousLine,
+//               previousLine.text.length > 0 {
+//                let previousStyle = previousLine.text.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle
+//                guard mutableStyle?.firstLineHeadIndent ?? 0 <= (previousStyle?.firstLineHeadIndent ?? 0) + editor.listLineFormatting.indentation else {
+//                    return
+//                }
+//            }
             // exit indentation if the resulting indentation is more than 1 level indent points
 //            else if (mutableStyle?.firstLineHeadIndent ?? 0) > editor.listLineFormatting.indentation {
 //                return
@@ -199,6 +199,7 @@ public class ListTextProcessor: TextProcessing {
 
     private func indentChildLists(editor: EditorView, editedRange: NSRange, originalParaStyle: NSParagraphStyle?, indentMode: Indentation) {
         var subListRange = NSRange.zero
+        // TODO: ERROR HERE: If line is empty and enter is pressed (in 2 level indent)
         guard let nextLine = editor.nextContentLine(from: editedRange.location),
               let originalParaStyle = originalParaStyle,
               editor.attributedText.attribute(.listItem, at: nextLine.range.location, longestEffectiveRange: &subListRange, in: NSRange(location: nextLine.range.location, length: editor.contentLength - nextLine.range.location)) != nil
