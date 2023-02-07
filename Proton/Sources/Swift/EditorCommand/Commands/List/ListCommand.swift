@@ -62,7 +62,7 @@ public class ListCommand: EditorCommand {
     /// to bullet vs ordered lists.
     /// - Note:
     /// When set to nil before running `execute`, it removes list formatting from the selected range of text.
-    public var attributeValue: Any?
+    var attributeValue: ListItem?
 
     /// Executes the command with value of `attributeValue` for `.listItem` attribute. If the `attributeValue` is nil, executing
     /// removed list formatting from the selected range of text.
@@ -83,7 +83,7 @@ public class ListCommand: EditorCommand {
         }
 
         guard selectedRange.length > 0 else {
-            ListTextProcessor().createListItemInANewLine(editor: editor, editedRange: selectedRange, indentMode: .indent, attributeValue: attributeValue)
+            ListTextProcessor().createListItemInANewLine(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
             return
         }
 
