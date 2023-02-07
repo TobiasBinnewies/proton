@@ -219,18 +219,20 @@ public class ListTextProcessor: TextProcessing {
         }
     }
 
+    // MARK: May produce errors (could not remove list)
     func createListItemInANewLine(editor: EditorView, editedRange: NSRange, indentMode: Indentation, attributeValue: Any?) {
         var listAttributeValue = attributeValue
         if listAttributeValue == nil, editedRange.location > 0 {
             listAttributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil)
         }
-        listAttributeValue = listAttributeValue ?? "listItemValue" // default value in case no other value can be obtained.
+//        listAttributeValue = listAttributeValue ?? "listItemValue" // default value in case no other value can be obtained.
 
         var attrs = editor.typingAttributes
-        let paraStyle = attrs[.paragraphStyle] as? NSParagraphStyle
-        let updatedStyle = updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
-        attrs[.paragraphStyle] = updatedStyle
-        attrs[.listItem] = updatedStyle?.firstLineHeadIndent ?? 0 > 0.0 ? listAttributeValue : nil
+//        let paraStyle = attrs[.paragraphStyle] as? NSParagraphStyle
+//        let updatedStyle = updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
+//        attrs[.paragraphStyle] = updatedStyle
+//        attrs[.listItem] = updatedStyle?.firstLineHeadIndent ?? 0 > 0.0 ? listAttributeValue : nil
+        attrs[.listItem] = listAttributeValue
         let marker = NSAttributedString(string: ListTextProcessor.blankLineFiller, attributes: attrs)
         editor.replaceCharacters(in: editedRange, with: marker)
         editor.selectedRange = editedRange.nextPosition
