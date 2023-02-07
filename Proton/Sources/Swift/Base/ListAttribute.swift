@@ -13,9 +13,12 @@ class ListItem: NSObject {
     private var indentLvl: Int
     private var symbol: SequenceGenerator
     
+    private let randomValue: Int
+    
     init(indentLvl: Int, symbol: SequenceGenerator) {
         self.indentLvl = indentLvl
         self.symbol = symbol
+        self.randomValue = Int.random(in: 0..<999)
     }
     
     public var indent: Int {
