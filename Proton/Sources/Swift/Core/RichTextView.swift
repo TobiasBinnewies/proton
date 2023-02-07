@@ -450,6 +450,10 @@ class RichTextView: AutogrowingTextView {
     }
 
     func removeAttributes(_ attrs: [NSAttributedString.Key], range: NSRange) {
+        if attrs.contains(.listItem) {
+            let paraStyle = defaultTextFormattingProvider?.paragraphStyle ?? richTextStorage.defaultParagraphStyle
+            richTextStorage.addAttribute(.paragraphStyle, value: paraStyle, range: range)
+        }
         richTextStorage.removeAttributes(attrs, range: range)
     }
 

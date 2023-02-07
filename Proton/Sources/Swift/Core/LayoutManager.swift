@@ -51,6 +51,7 @@ class LayoutManager: NSLayoutManager {
             }
         }
     }
+    
 
     var defaultParagraphStyle: NSParagraphStyle {
         return layoutManagerDelegate?.paragraphStyle ?? NSParagraphStyle()
