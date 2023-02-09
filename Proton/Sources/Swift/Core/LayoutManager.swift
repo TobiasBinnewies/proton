@@ -49,7 +49,8 @@ class LayoutManager: NSLayoutManager {
         var lastListItem: ListItem? = nil
         var listAttr: [NSRange: ListItem] = [:]
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: [.reverse]) { (value, range, _) in
-            guard let value = value as? ListItem else { return }
+            guard textStorage.substring(from: range) != "\n",
+                  let value = value as? ListItem else { return }
             listAttr[range] = value
         }
         
