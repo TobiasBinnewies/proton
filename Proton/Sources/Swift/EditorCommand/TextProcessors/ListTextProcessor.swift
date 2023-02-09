@@ -63,7 +63,7 @@ public class ListTextProcessor: TextProcessing {
     }
 
     public func handleKeyWithModifiers(editor: EditorView, key: EditorKey, modifierFlags: UIKeyModifierFlags, range editedRange: NSRange)  {
-        guard editedRange != .zero else { return }
+//        guard editedRange != .zero else { return }
         switch key {
         case .tab:
             // Indent only if previous character is a listItem

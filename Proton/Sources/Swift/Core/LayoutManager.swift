@@ -48,31 +48,32 @@ class LayoutManager: NSLayoutManager {
         
         var lastListItem: ListItem? = nil
         var listAttr: [NSRange: ListItem] = [:]
-        textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: [.reverse]) { (value, range, _) in
+        textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
             guard textStorage.substring(from: range) != "\n",
                   let value = value as? ListItem else { return }
             listAttr[range] = value
         }
         
-        for attr in listAttr {
+        for attr in listAttr.reversed() {
             let range = attr.key
             let value = attr.value
             let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
-            if lines.count == 1, value.nextItem == lastListItem {
-                lastListItem = value
-                drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
-                return
-            }
             for line in lines.reversed() {
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
                     drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: lastListItem!)
                     return
                 }
-                let copy = value.deepCopy()
-                copy.nextItem = lastListItem
-                lastListItem = copy
-                textStorage.addAttribute(.listItem, value: copy, range: line.range)
-                drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: copy)
+                if lines.count > 1 {
+                    let copy = value.deepCopy()
+                    copy.nextItem = lastListItem
+                    lastListItem = copy
+                    textStorage.addAttribute(.listItem, value: copy, range: line.range)
+                    drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: copy)
+                    return
+                }
+                value.nextItem = lastListItem
+                lastListItem = value
+                drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
             }
         }
         
