@@ -46,7 +46,7 @@ class LayoutManager: NSLayoutManager {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
         guard let textStorage = self.textStorage else { return }
         
-        var lastListItem: ListItem? = nil
+        // Adding one ListItem-Reference per Line
         var listAttr: [NSRange: ListItem] = [:]
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
             guard textStorage.substring(from: range) != "\n",
@@ -54,6 +54,7 @@ class LayoutManager: NSLayoutManager {
             listAttr[range] = value
         }
         
+        var lastListItem: ListItem? = nil
         for attr in listAttr.sorted(by: { lhs, rhs in
             lhs.key.location < rhs.key.location
         }).reversed() {
@@ -228,7 +229,7 @@ class LayoutManager: NSLayoutManager {
         previousLevel = level
         
         let font = lastLayoutFont ?? defaultFont
-        drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
+//        drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
     }
     
     private func drawListItem(level: Int, previousLevel: Int, index: Int, rect: CGRect, paraStyle: NSParagraphStyle, font: UIFont, attributeValue: Any?) {
