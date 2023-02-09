@@ -67,10 +67,10 @@ public class ListTextProcessor: TextProcessing {
         switch key {
         case .tab:
             // Indent only if previous character is a listItem
-            guard editedRange.location > 0
-//                  let attributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil)
-            else { return }
-            
+//            guard editedRange.location > 0
+////                  let attributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil)
+//            else { return }
+//            
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
