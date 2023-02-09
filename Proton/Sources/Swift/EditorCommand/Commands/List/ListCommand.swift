@@ -98,6 +98,7 @@ public class ListCommand: EditorCommand {
 
         // Fix the list attribute on the trailing `\n` in previous line, if previous line has a listItem attribute applied
         if let previousLine = editor.previousContentLine(from: selectedRange.location),
+           // TODO: May produce error if previous line length = 0
            let listValue = editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation - 1, effectiveRange: nil),
            editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation, effectiveRange: nil) == nil {
             editor.addAttribute(.listItem, value: listValue, at: NSRange(location: previousLine.range.endLocation, length: 1))
@@ -108,7 +109,11 @@ public class ListCommand: EditorCommand {
 //            let mutableStyle = ListTextProcessor().updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: .indent)
 //            editor.addAttribute(.paragraphStyle, value: mutableStyle ?? editor.paragraphStyle, at: range)
 //        }
-        editor.addAttribute(.listItem, value: attrValue, at: selectedRange)
+        let lines = editor.contentLinesInRange(selectedRange)
+        for line in lines {
+            let copy = attrValue.mutableCopy
+            editor.addAttribute(.listItem, value: copy, at: line.range)
+        }
         attributeValue = nil
     }
 }

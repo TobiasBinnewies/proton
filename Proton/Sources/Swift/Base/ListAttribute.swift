@@ -12,6 +12,7 @@ import UIKit
 class ListItem: NSObject {
     fileprivate var indentLvl: Int
     fileprivate var symbol: SequenceGenerator
+    fileprivate var nextItem: ListItem?
     
     init(indentLvl: Int, symbol: SequenceGenerator) {
         self.indentLvl = indentLvl
@@ -22,6 +23,10 @@ class ListItem: NSObject {
         MutableListItem(indentLvl: self.indentLvl, symbol: self.symbol)
     }
     
+    var nextListItem: ListItem? {
+        nextItem
+    }
+    
     public var indent: Int {
         indentLvl
     }
@@ -29,7 +34,6 @@ class ListItem: NSObject {
     public var listSymbol: SequenceGenerator {
         symbol
     }
-    
 }
 
 class MutableListItem: ListItem {
@@ -43,7 +47,11 @@ class MutableListItem: ListItem {
         }
     }
     
-    func setSymbol(symbol: SequenceGenerator) {
+    func setSymbol(_ symbol: SequenceGenerator) {
         self.symbol = symbol
+    }
+    
+    func setNextListItem(_ listItem: ListItem?) {
+        self.nextItem = listItem
     }
 }
