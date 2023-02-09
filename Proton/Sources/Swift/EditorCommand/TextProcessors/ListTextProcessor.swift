@@ -70,7 +70,7 @@ public class ListTextProcessor: TextProcessing {
 //            guard editedRange.location > 0
 ////                  let attributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil)
 //            else { return }
-//            
+//
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
@@ -165,6 +165,7 @@ public class ListTextProcessor: TextProcessing {
         let lines = editor.contentLinesInRange(editedRange)
 //        attributeValue?.changeIndent(indentMode: indentMode)
         for line in lines {
+            // TODO: Insert case where line is empty (current: Error)
             guard let listItem = line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem else { continue }
             var mutableListItem = listItem.mutableCopy
             mutableListItem.changeIndent(indentMode: indentMode)
