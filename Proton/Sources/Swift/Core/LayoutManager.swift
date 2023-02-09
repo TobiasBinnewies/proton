@@ -46,17 +46,16 @@ class LayoutManager: NSLayoutManager {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
         guard let textStorage = self.textStorage else { return }
         
-        var lastListItemStore: ListItem? = nil
-        var lastListItem: ListItem? {
-            get {
-                lastListItemStore
-            }
-            set {
-                lastListItemStore = newValue
-            }
-        }
+        var lastListItem: ListItem? = nil
+        var listAttr: [NSRange: ListItem] = [:]
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: [.reverse]) { (value, range, _) in
             guard let value = value as? ListItem else { return }
+            listAttr[range] = value
+        }
+        
+        for attr in listAttr {
+            let range = attr.key
+            let value = attr.value
             let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
             if lines.count == 1, value.nextItem == lastListItem {
                 lastListItem = value
@@ -75,6 +74,7 @@ class LayoutManager: NSLayoutManager {
                 drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: copy)
             }
         }
+        
     }
     
     
