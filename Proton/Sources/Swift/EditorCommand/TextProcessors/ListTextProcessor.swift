@@ -74,7 +74,7 @@ public class ListTextProcessor: TextProcessing {
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
-            guard editedRange.location > 1, let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem else { return }
+            guard editedRange.location > 1, editedRange.length > 0, let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem else { return }
             
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
             
