@@ -168,10 +168,17 @@ public class ListTextProcessor: TextProcessing {
             guard let listItem = line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem else { continue }
             var mutableListItem = listItem.mutableCopy
             mutableListItem.changeIndent(indentMode: indentMode)
+            let lineRange: NSRange = {
+                // If line has \n at the end --> include this char in linerange
+                if editor.nextContentLine(from: line.range.location) != nil {
+                    return NSRange(location: line.range.location, length: line.range.length+1)
+                }
+                return line.range
+            }()
             if line.text.length == 0
 //                || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil
             {
-                createListItemInANewLine(editor: editor, editedRange: line.range, attributeValue: listItem)
+                createListItemInANewLine(editor: editor, editedRange: lineRange, attributeValue: mutableListItem)
                 continue
             }
 
@@ -191,11 +198,12 @@ public class ListTextProcessor: TextProcessing {
 //                return
 //            }
 
-            editor.addAttribute(.listItem, value: mutableListItem, at: line.range)
+            editor.addAttribute(.listItem, value: mutableListItem, at: lineRange)
 
             // Remove listItem attribute if indented all the way back
             if listItem.indent == 0 {
-                editor.removeAttribute(.listItem, at: line.range)
+                // TODO: check if lineRange or line.range needs to be used here
+                editor.removeAttribute(.listItem, at: lineRange)
                 // remove list attribute from new line char in the previous line
                 if let previousLine = previousLine {
                     editor.removeAttribute(.listItem, at: NSRange(location: previousLine.range.endLocation, length: 1))
