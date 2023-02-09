@@ -55,7 +55,7 @@ class LayoutManager: NSLayoutManager {
                 drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
                 return
             }
-            for line in lines {
+            for line in lines.reversed() {
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
                     drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: lastListItem!)
                     return
