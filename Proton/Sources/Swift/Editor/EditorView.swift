@@ -654,6 +654,8 @@ open class EditorView: UIView {
     /// newline character.
     /// - Parameter location: Location to find line from, in forward direction
     /// - Returns: Content line if a newline character exists after the current location, else nil
+    ///
+    ///  > Warning: Returns nil if the cursor is in the end of a line
     public func nextContentLine(from location: Int) -> EditorLine? {
         return richTextView.nextContentLine(from: location)
     }

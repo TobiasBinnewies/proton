@@ -60,4 +60,11 @@ public extension String {
         }
         return ranges
     }
+    
+    subscript(offset: Int) -> Character? {
+        if offset < 0 || offset > self.count-1 {
+            return nil
+        }
+        return self[index(startIndex, offsetBy: offset)]
+    }
 }

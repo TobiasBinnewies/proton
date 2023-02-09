@@ -170,7 +170,7 @@ public class ListTextProcessor: TextProcessing {
             mutableListItem.changeIndent(indentMode: indentMode)
             let lineRange: NSRange = {
                 // If line has \n at the end --> include this char in linerange
-                if editor.nextContentLine(from: line.range.location) != nil {
+                if editor.attributedText.string[line.range.location + line.range.length] == "\n" {
                     return NSRange(location: line.range.location, length: line.range.length+1)
                 }
                 return line.range

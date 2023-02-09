@@ -245,6 +245,7 @@ class RichTextView: AutogrowingTextView {
         return EditorLine(text: attributedText.attributedSubstring(from: range), range: range)
     }
 
+    ///  > Warning: Returns nil if the cursor is in the end of a line
     func nextContentLine(from location: Int) -> EditorLine? {
         let currentLineRange = rangeOfParagraph(at: location)
         guard let position = self.position(from: beginningOfDocument, offset: currentLineRange.endLocation + 1),
