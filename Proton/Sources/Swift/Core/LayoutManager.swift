@@ -41,14 +41,15 @@ class LayoutManager: NSLayoutManager {
 
     weak var layoutManagerDelegate: LayoutManagerDelegate?
     
-    private var currentlySettingMarkers: Bool = false
+    private var currentlySettingMarkersForRange: NSRange? = nil
     
     override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
         guard let textStorage = self.textStorage else { return }
-
+        
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
             if let value = value as? ListItem {
+                currentlySettingMarkersForRange = range
                 drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
             }
         }
@@ -60,8 +61,7 @@ class LayoutManager: NSLayoutManager {
     }
 
     private func drawListMarkers(textStorage: NSTextStorage, listRange: NSRange, attributeValue: ListItem) {
-        if currentlySettingMarkers { return }
-        currentlySettingMarkers = true
+        guard currentlySettingMarkersForRange == listRange else { return }
         
         var lastLayoutRect: CGRect?
         var lastLayoutParaStyle: NSParagraphStyle?
@@ -204,8 +204,6 @@ class LayoutManager: NSLayoutManager {
         
         let font = lastLayoutFont ?? defaultFont
         drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
-        
-        currentlySettingMarkers = false
     }
 
     private func drawListItem(level: Int, previousLevel: Int, index: Int, rect: CGRect, paraStyle: NSParagraphStyle, font: UIFont, attributeValue: Any?) {
