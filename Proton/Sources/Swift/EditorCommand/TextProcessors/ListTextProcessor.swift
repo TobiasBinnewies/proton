@@ -167,8 +167,8 @@ public class ListTextProcessor: TextProcessing {
         for line in lines {
             // TODO: Insert case where line is empty (current: Error)
             guard let listItem = line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem else { continue }
-            var mutableListItem = listItem.mutableCopy
-            mutableListItem.changeIndent(indentMode: indentMode)
+//            var mutableListItem = listItem.mutableCopy
+            listItem.changeIndent(indentMode: indentMode)
             let lineRange: NSRange = {
                 // If line has \n at the end --> include this char in linerange
                 if editor.attributedText.string[line.range.location + line.range.length] == "\n" {
@@ -179,7 +179,7 @@ public class ListTextProcessor: TextProcessing {
             if line.text.length == 0
 //                || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil
             {
-                createListItemInANewLine(editor: editor, editedRange: lineRange, attributeValue: mutableListItem)
+                createListItemInANewLine(editor: editor, editedRange: lineRange, attributeValue: listItem)
                 continue
             }
 
@@ -199,10 +199,10 @@ public class ListTextProcessor: TextProcessing {
 //                return
 //            }
 
-            editor.addAttribute(.listItem, value: mutableListItem, at: lineRange)
+            editor.addAttribute(.listItem, value: listItem, at: lineRange)
 
             // Remove listItem attribute if indented all the way back
-            if listItem.indent == 0 {
+            if listItem.indentLvl == 0 {
                 // TODO: check if lineRange or line.range needs to be used here
                 editor.removeAttribute(.listItem, at: lineRange)
                 // remove list attribute from new line char in the previous line

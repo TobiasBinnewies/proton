@@ -614,6 +614,10 @@ extension RichTextView: TextStorageDelegate {
 
 extension RichTextView: LayoutManagerDelegate {
     
+    var richTextView: RichTextView {
+        self
+    }
+    
     var listLineFormatting: LineFormatting {
         return richTextViewListDelegate?.listLineFormatting ?? RichTextView.defaultListLineFormatting
     }

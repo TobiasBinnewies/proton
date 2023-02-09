@@ -109,11 +109,7 @@ public class ListCommand: EditorCommand {
 //            let mutableStyle = ListTextProcessor().updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: .indent)
 //            editor.addAttribute(.paragraphStyle, value: mutableStyle ?? editor.paragraphStyle, at: range)
 //        }
-        let lines = editor.contentLinesInRange(selectedRange)
-        for line in lines {
-            let copy = attrValue.mutableCopy
-            editor.addAttribute(.listItem, value: copy, at: line.range)
-        }
+        editor.addAttribute(.listItem, value: attrValue, at: selectedRange)
         attributeValue = nil
     }
 }
