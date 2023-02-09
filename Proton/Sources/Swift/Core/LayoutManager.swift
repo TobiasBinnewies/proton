@@ -49,7 +49,7 @@ class LayoutManager: NSLayoutManager {
         // Adding one ListItem-Reference per Line
         var listAttr: [NSRange: ListItem] = [:]
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
-            guard range.length > 0, textStorage.substring(from: range) != "\n",
+            guard textStorage.substring(from: range) != "\n",
                   let value = value as? ListItem else { return }
             listAttr[range] = value
         }
@@ -62,6 +62,7 @@ class LayoutManager: NSLayoutManager {
             let value = attr.value
             let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
             for line in lines.reversed() {
+                guard line.range.length > 0 else { continue }
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
                     drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: lastListItem!)
                     return
