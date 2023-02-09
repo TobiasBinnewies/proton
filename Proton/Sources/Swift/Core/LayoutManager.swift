@@ -54,7 +54,9 @@ class LayoutManager: NSLayoutManager {
             listAttr[range] = value
         }
         
-        for attr in listAttr.reversed() {
+        for attr in listAttr.sorted(by: { lhs, rhs in
+            lhs.key.location < rhs.key.location
+        }).reversed() {
             let range = attr.key
             let value = attr.value
             let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
