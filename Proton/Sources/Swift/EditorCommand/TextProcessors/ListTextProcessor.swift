@@ -78,7 +78,7 @@ public class ListTextProcessor: TextProcessing {
             
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
             
-            createListItemInANewLine(editor: editor, editedRange: editedRange, attributeValue: attributedValue)
+            createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
             
             
             // TODO: Insert ShiftReturn and Exit List
