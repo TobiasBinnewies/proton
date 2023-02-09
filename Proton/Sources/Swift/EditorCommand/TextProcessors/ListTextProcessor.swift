@@ -74,19 +74,27 @@ public class ListTextProcessor: TextProcessing {
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
-            let location = min(editedRange.location, editor.contentLength - 1)
-            guard location >= 0,
-                  editor.contentLength > 0
-            else { return }
+            guard let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location, effectiveRange: nil) as? ListItem else { return }
             
-            let attrs = editor.attributedText.attributes(at: location, effectiveRange: nil)
-            if attrs[.listItem] != nil {
-                if modifierFlags == .shift {
-                    handleShiftReturn(editor: editor, editedRange: editedRange, attrs: attrs)
-                } else {
-                    exitListsIfRequired(editor: editor, editedRange: editedRange)
-                }
-            }
+//            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
+            
+            createListItemInANewLine(editor: editor, editedRange: editedRange, attributeValue: attributedValue)
+            
+            
+            // TODO: Insert ShiftReturn and Exit List
+//            let location = min(editedRange.location, editor.contentLength - 1)
+//            guard location >= 0,
+//                  editor.contentLength > 0
+//            else { return }
+//
+//            let attrs = editor.attributedText.attributes(at: location, effectiveRange: nil)
+//            if attrs[.listItem] != nil {
+//                if modifierFlags == .shift {
+//                    handleShiftReturn(editor: editor, editedRange: editedRange, attrs: attrs)
+//                } else {
+//                    exitListsIfRequired(editor: editor, editedRange: editedRange)
+//                }
+//            }
 
         case .backspace:
             let attributedText = editor.attributedText
