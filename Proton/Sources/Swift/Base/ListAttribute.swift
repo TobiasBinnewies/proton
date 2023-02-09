@@ -10,15 +10,16 @@ import Foundation
 import UIKit
 
 class ListItem: NSObject {
-    private var indentLvl: Int
-    private var symbol: SequenceGenerator
-    
-    private let randomValue: Int
+    fileprivate var indentLvl: Int
+    fileprivate var symbol: SequenceGenerator
     
     init(indentLvl: Int, symbol: SequenceGenerator) {
         self.indentLvl = indentLvl
         self.symbol = symbol
-        self.randomValue = Int.random(in: 0..<999)
+    }
+    
+    var mutableCopy: MutableListItem {
+        MutableListItem(indentLvl: self.indentLvl, symbol: self.symbol)
     }
     
     public var indent: Int {
@@ -29,6 +30,10 @@ class ListItem: NSObject {
         symbol
     }
     
+}
+
+class MutableListItem: ListItem {
+    
     func changeIndent(indentMode: Indentation) {
         switch indentMode {
         case .indent:
@@ -36,5 +41,9 @@ class ListItem: NSObject {
         case .outdent:
             indentLvl -= 1
         }
+    }
+    
+    func setSymbol(symbol: SequenceGenerator) {
+        self.symbol = symbol
     }
 }

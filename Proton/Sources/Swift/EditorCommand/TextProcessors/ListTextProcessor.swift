@@ -166,7 +166,8 @@ public class ListTextProcessor: TextProcessing {
 //        attributeValue?.changeIndent(indentMode: indentMode)
         for line in lines {
             guard let listItem = line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem else { continue }
-            listItem.changeIndent(indentMode: indentMode)
+            var mutableListItem = listItem.mutableCopy
+            mutableListItem.changeIndent(indentMode: indentMode)
             if line.text.length == 0
 //                || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil
             {
@@ -190,7 +191,7 @@ public class ListTextProcessor: TextProcessing {
 //                return
 //            }
 
-            editor.addAttribute(.listItem, value: listItem, at: line.range)
+            editor.addAttribute(.listItem, value: mutableListItem, at: line.range)
 
             // Remove listItem attribute if indented all the way back
             if listItem.indent == 0 {
