@@ -73,8 +73,7 @@ public class ListTextProcessor: TextProcessing {
             
             guard
                 editor.contentLength > 0,
-                let currentLine = editor.contentLinesInRange(NSRange(location: max(0, editedRange.location-1), length: 0)).first,
-                currentLine.range.length > 0,
+                let currentLine = editor.contentLinesInRange(NSRange(location: max(0, editedRange.location-1), length: 0)).first(where: {$0.range.length > 0}),
                 let attributedValue = currentLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             else { return }
             
