@@ -77,9 +77,13 @@ public class ListTextProcessor: TextProcessing {
             else { return }
             
             // Deleting the inserted "\n"
-            let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
-            editor.replaceCharacters(in: editedRange, with: "")
-            let updatedEditedRange = NSRange(location: editedRange.location, length: 0)
+            var updatedEditedRange = editedRange
+            var attrs: [NSAttributedString.Key: Any] = [:]
+            if editedRange.length > 0 {
+                let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
+                editor.replaceCharacters(in: editedRange, with: "")
+                updatedEditedRange = NSRange(location: editedRange.location, length: 0)
+            }
             
             if modifierFlags == .shift {
                 handleShiftReturn(editor: editor, editedRange: updatedEditedRange, attrs: editor.typingAttributes)
@@ -89,6 +93,10 @@ public class ListTextProcessor: TextProcessing {
             if currentLine.text.string == Character.blankLineFiller {
                 updateListItemIfRequired(editor: editor, editedRange: updatedEditedRange, indentMode: .outdent)
                 editor.selectedRange = updatedEditedRange.shiftedBy(-2).fitInRange(editor.contentLength)
+                return
+            }
+            
+            if editedRange.length == 0 {
                 return
             }
             
