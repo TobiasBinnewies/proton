@@ -260,6 +260,7 @@ public class ListTextProcessor: TextProcessing {
                     let charLocation = lineRange.location + pos
                     editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
                 }
+                editor.selectedRange = NSRange(location: lineRange.location, length: 0)
             }
 //            indentChildLists(editor: editor, editedRange: line.range, originalParaStyle: paraStyle, indentMode: indentMode)
         }
