@@ -78,33 +78,34 @@ public class ListTextProcessor: TextProcessing {
                 let attributedValue = currentLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             else { return }
             
+            //TODO: Add following actions (shiftenter & enter on empty listline)
             // Deleting the inserted "\n"
-            var updatedEditedRange = editedRange
-            var attrs: [NSAttributedString.Key: Any] = [:]
-            if editedRange.length > 0 {
-                let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
-                editor.replaceCharacters(in: editedRange, with: "")
-                updatedEditedRange = NSRange(location: editedRange.location, length: 0)
-            }
+//            var updatedEditedRange = editedRange
+//            var attrs: [NSAttributedString.Key: Any] = [:]
+//            if editedRange.length > 0 {
+//                let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
+//                editor.replaceCharacters(in: editedRange, with: "")
+//                updatedEditedRange = NSRange(location: editedRange.location, length: 0)
+//            }
             
-            if modifierFlags == .shift {
-                handleShiftReturn(editor: editor, editedRange: updatedEditedRange, attrs: editor.typingAttributes)
-                return
-            }
+//            if modifierFlags == .shift {
+//                handleShiftReturn(editor: editor, editedRange: updatedEditedRange, attrs: editor.typingAttributes)
+//                return
+//            }
+//
+//            if currentLine.text.string == Character.blankLineFiller {
+//                updateListItemIfRequired(editor: editor, editedRange: updatedEditedRange, indentMode: .outdent)
+//                editor.selectedRange = updatedEditedRange.shiftedBy(-2).fitInRange(editor.contentLength)
+//                return
+//            }
             
-            if currentLine.text.string == Character.blankLineFiller {
-                updateListItemIfRequired(editor: editor, editedRange: updatedEditedRange, indentMode: .outdent)
-                editor.selectedRange = updatedEditedRange.shiftedBy(-2).fitInRange(editor.contentLength)
-                return
-            }
+//            if editedRange.length == 0 {
+//                return
+//            }
+//
+//            editor.replaceCharacters(in: NSRange(location: updatedEditedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
             
-            if editedRange.length == 0 {
-                return
-            }
-            
-            editor.replaceCharacters(in: NSRange(location: updatedEditedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
-            
-            createListItemInANewLine(editor: editor, editedRange: updatedEditedRange.nextPosition, attributeValue: attributedValue)
+            createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
             
             
             // TODO: Insert ShiftReturn and Exit List
