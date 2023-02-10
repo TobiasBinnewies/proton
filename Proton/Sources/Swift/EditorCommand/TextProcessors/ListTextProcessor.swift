@@ -89,7 +89,7 @@ public class ListTextProcessor: TextProcessing {
             
             if currentLine.text.string == Character.blankLineFiller {
                 updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: .outdent)
-                editor.selectedRange = editedRange.shiftedBy(-1)
+                editor.selectedRange = editedRange.shiftedBy(-1).fitInRange(editor.contentLength)
                 return
             }
             
@@ -298,7 +298,7 @@ public class ListTextProcessor: TextProcessing {
         var insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
         
         editor.replaceCharacters(in: insertMarkerInLastLine ? NSRange(location: editedRange.location-1, length: 0) : editedRange, with: marker)
-        editor.selectedRange = editedRange
+        editor.selectedRange = editedRange.fitInRange(editor.contentLength)
 //        editor.selectedRange = editedRange.nextPosition
     }
 
