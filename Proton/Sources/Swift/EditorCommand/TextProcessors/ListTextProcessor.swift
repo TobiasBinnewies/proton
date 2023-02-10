@@ -243,6 +243,11 @@ public class ListTextProcessor: TextProcessing {
                 if let previousLine = previousLine {
                     editor.removeAttribute(.listItem, at: NSRange(location: previousLine.range.endLocation, length: 1))
                 }
+                let blankCharPositions = editor.attributedText.substring(from: lineRange)[Character.blankLineFiller]
+                for pos in blankCharPositions {
+                    let charLocation = lineRange.location + pos
+                    editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                }
             }
 //            indentChildLists(editor: editor, editedRange: line.range, originalParaStyle: paraStyle, indentMode: indentMode)
         }
