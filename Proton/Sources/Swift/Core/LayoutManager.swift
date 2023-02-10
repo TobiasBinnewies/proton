@@ -72,13 +72,14 @@ class LayoutManager: NSLayoutManager {
             lhs.key.location < rhs.key.location
         }).reversed() {
             let value = attr.value
-            let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(attr.key) ?? []
+            let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(attr.key).filter({ line in
+                line.range.length > 0
+            }) ?? []
             for line in lines.reversed() {
                 var lineLength = line.range.length
                 var lineRange: NSRange {
                         NSRange(location: line.range.location, length: lineLength)
                 }
-                guard lineRange.length > 0 else { continue }
                 // Removing multible line filler chars if text has been written in the line
                 let blankCharPositions = line.text.string[Character.blankLineFiller]
                 if blankCharPositions.count > 1 {
