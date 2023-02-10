@@ -79,7 +79,8 @@ public class ListTextProcessor: TextProcessing {
             }
             
             if currentLine.text.string == Character.blankLineFiller {
-                handleReturnOnEmptyLine(editor: editor, line: currentLine, listAttr: listAttr)
+//                handleReturnOnEmptyLine(editor: editor, line: currentLine, listAttr: listAttr)
+                updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: .outdent)
                 return
             }
             
@@ -170,6 +171,7 @@ public class ListTextProcessor: TextProcessing {
     private func handleReturnOnEmptyLine(editor: EditorView, line: EditorLine, listAttr: ListItem) {
         if listAttr.indentLvl > 1 {
             listAttr.changeIndent(indentMode: .outdent)
+            editor.replaceCharacters(in: NSRange(location: line.range.location + 1, length: 1), with: "")
             return
         }
         editor.removeAttribute(.listItem, at: line.range)
