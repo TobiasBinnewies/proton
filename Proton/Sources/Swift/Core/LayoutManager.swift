@@ -48,10 +48,23 @@ class LayoutManager: NSLayoutManager {
         
         // Adding one ListItem-Reference per Line
         var listAttr: [NSRange: ListItem] = [:]
+        let rawText = textStorage.substring(from: textStorage.fullRange)
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
-            guard textStorage.substring(from: range) != "\n",
-                  let value = value as? ListItem else { return }
-            listAttr[range] = value
+            guard let value = value as? ListItem else { return }
+            let cleanRange = {
+                var location = range.location
+                var length = range.length
+                if rawText[range.location] == "\n" {
+                    location += 1
+                    length -= 1
+                }
+                if rawText[range.endLocation] == "\n" {
+                    length -= 1
+                }
+                return NSRange(location: location, length: length)
+            }()
+            if cleanRange.length == 0 { return }
+            listAttr[cleanRange] = value
         }
         
         var lastListItem: ListItem? = nil
