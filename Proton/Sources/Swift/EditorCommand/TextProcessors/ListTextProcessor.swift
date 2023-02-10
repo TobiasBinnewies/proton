@@ -71,7 +71,16 @@ public class ListTextProcessor: TextProcessing {
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
             
-            guard editor.contentLength > 0, let currentLine = editor.contentLinesInRange(editedRange).first, let listAttr = editor.attributedText.attribute(.listItem, at: currentLine.range.location, effectiveRange: nil) as? ListItem else { return }
+            guard
+                editedRange.location > 1,
+                editedRange.length > 0,
+                let currentLine = editor.contentLinesInRange(editedRange.shiftedBy(-1)).first,
+                let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem
+            else { return }
+            
+            // Deleting the inserted "\n"
+            let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
+            editor.replaceCharacters(in: editedRange, with: "")
             
             if modifierFlags == .shift {
                 handleShiftReturn(editor: editor, editedRange: editedRange, attrs: editor.typingAttributes)
@@ -79,17 +88,14 @@ public class ListTextProcessor: TextProcessing {
             }
             
             if currentLine.text.string == Character.blankLineFiller {
-//                handleReturnOnEmptyLine(editor: editor, line: currentLine, listAttr: listAttr)
                 updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: .outdent)
-                editor.replaceCharacters(in: NSRange(location: currentLine.range.location + 1, length: 1), with: "")
                 editor.selectedRange = editedRange.shiftedBy(-1)
                 return
             }
             
-            
-            guard editedRange.location > 1, editedRange.length > 0, let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem else { return }
-            
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
+            
+            editor.replaceCharacters(in: NSRange(location: editedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
             
             createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
             

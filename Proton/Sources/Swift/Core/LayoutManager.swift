@@ -63,11 +63,12 @@ class LayoutManager: NSLayoutManager {
                 var lineRange: NSRange {
                         NSRange(location: line.range.location, length: lineLength)
                 }
+                let skipNextLineMarker = line.text.attribute(.skipNextListMarker, at: line.range.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
                 let blankCharPositions = line.text.string[Character.blankLineFiller]
                 if blankCharPositions.count > 1 {
                     for pos in blankCharPositions {
-                        if pos == 0 { continue }
+                        if !skipNextLineMarker, pos == 0 { continue }
                         let charLocation = line.range.location + pos
                         textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
                         lineLength -= 1
@@ -80,7 +81,7 @@ class LayoutManager: NSLayoutManager {
                     lineLength += 1
                 }
                 // Ignoring lines with skipNextLineMarker
-                if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
+                if skipNextLineMarker {
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
                     return
                 }
