@@ -169,7 +169,21 @@ public class ListTextProcessor: TextProcessing {
         let lines = editor.contentLinesInRange(editedRange)
 //        attributeValue?.changeIndent(indentMode: indentMode)
         for line in lines {
-            // TODO: Insert case where line is empty (current: Error)
+            if line.range.length == 0 {
+                let attributedValue = {
+                    if let previousLine = editor.previousContentLine(from: line.range.location), let prevAttr = previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem {
+                        return prevAttr.nextItem
+                    }
+                    if let nextLine = editor.nextContentLine(from: line.range.location), let nextAttr = nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem {
+                        return nextAttr.nextItem
+                    }
+                    // There needs to be a line around the current line
+                    fatalError()
+                }()
+                attributedValue?.changeIndent(indentMode: indentMode)
+                createListItemInANewLine(editor: editor, editedRange: line.range, attributeValue: attributedValue)
+                continue
+            }
             guard let listItem = line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem else { continue }
 //            var mutableListItem = listItem.mutableCopy
             listItem.changeIndent(indentMode: indentMode)
