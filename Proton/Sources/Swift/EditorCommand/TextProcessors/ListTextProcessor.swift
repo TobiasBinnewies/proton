@@ -105,7 +105,7 @@ public class ListTextProcessor: TextProcessing {
 //
 //            editor.replaceCharacters(in: NSRange(location: updatedEditedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
             
-            if editedRange.length > 0 {
+            if editedRange.length == 0 {
                 return
             }
             
