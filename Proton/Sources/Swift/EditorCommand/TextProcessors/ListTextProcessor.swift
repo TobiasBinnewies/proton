@@ -73,9 +73,14 @@ public class ListTextProcessor: TextProcessing {
             
             guard
                 editor.contentLength > 0,
-                let currentLine = editor.contentLinesInRange(NSRange(location: max(0, editedRange.location-1), length: 0)).first(where: {$0.range.length > 0}),
-                let attributedValue = currentLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
+                let attributedValue = editor.attributedText.attribute(.listItem, at: max(0, editedRange.location-1), effectiveRange: nil) as? ListItem
             else { return }
+            
+//            guard
+//                editor.contentLength > 0,
+//                let currentLine = editor.contentLinesInRange(NSRange(location: max(0, editedRange.location-1), length: 0)).first(where: {$0.range.length > 0}),
+//                let attributedValue = currentLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
+//            else { return }
             
             //TODO: Add following actions (shiftenter & enter on empty listline)
             // Deleting the inserted "\n"
