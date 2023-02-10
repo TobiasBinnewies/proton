@@ -63,7 +63,7 @@ class LayoutManager: NSLayoutManager {
                 var lineRange: NSRange {
                         NSRange(location: line.range.location, length: lineLength)
                 }
-                let skipNextLineMarker = line.range.length > 0 && line.text.attribute(.skipNextListMarker, at: line.range.endLocation+1, effectiveRange: nil) != nil
+                let skipNextLineMarker = textStorage.length > line.range.endLocation && line.text.attribute(.skipNextListMarker, at: line.range.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
                 let blankCharPositions = line.text.string[Character.blankLineFiller]
                 if blankCharPositions.count > 1 {
