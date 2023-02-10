@@ -254,7 +254,7 @@ public class ListTextProcessor: TextProcessing {
         attrs[.listItem] = listAttributeValue
         let marker = NSAttributedString(string: String(Character.blankLineFiller), attributes: attrs)
         editor.replaceCharacters(in: editedRange, with: marker)
-        editor.selectedRange = editedRange.nextPosition
+//        editor.selectedRange = editedRange.nextPosition
     }
 
 //    func updatedParagraphStyle(paraStyle: NSParagraphStyle?, listLineFormatting: LineFormatting, indentMode: Indentation) -> NSParagraphStyle? {

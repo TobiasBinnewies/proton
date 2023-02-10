@@ -47,34 +47,16 @@ class LayoutManager: NSLayoutManager {
         guard let textStorage = self.textStorage else { return }
         
         // Adding one ListItem-Reference per Line
-        var listAttr: [NSRange: ListItem] = [:]
-        let rawText = textStorage.substring(from: textStorage.fullRange)
+        var listAttr = [NSRange: ListItem]()
         textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
-            guard let value = value as? ListItem else { return }
-            let cleanRange = {
-                var location = range.location
-                var length = range.length
-                if rawText[range.location] == "\n" {
-                    location += 1
-                    length -= 1
-                }
-                if rawText[range.endLocation] == "\n" {
-                    length -= 1
-                }
-                return NSRange(location: location, length: length)
-            }()
-            if cleanRange.length == 0 { return }
-            listAttr[cleanRange] = value
+            guard textStorage.substring(from: range) != "\n", let value = value as? ListItem else { return }
+            listAttr[range] = value
         }
         
         var lastListItem: ListItem? = nil
-        for attr in listAttr.sorted(by: { lhs, rhs in
-            lhs.key.location < rhs.key.location
-        }).reversed() {
+        for attr in listAttr.sorted(by: { $0.key.location < $1.key.location }).reversed() {
             let value = attr.value
-            let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(attr.key).filter({ line in
-                line.range.length > 0
-            }) ?? []
+            let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key).filter({ $0.range.length > 0 })
             for line in lines.reversed() {
                 var lineLength = line.range.length
                 var lineRange: NSRange {
@@ -96,10 +78,12 @@ class LayoutManager: NSLayoutManager {
                     textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
                     lineLength += 1
                 }
+                // Ignoring lines with skipNextLineMarker
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
                     return
                 }
+                // Adding one ListItem-Reference per line
                 if lines.count > 1 {
                     let copy = value.deepCopy()
                     copy.nextItem = lastListItem
@@ -108,6 +92,7 @@ class LayoutManager: NSLayoutManager {
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
                     return
                 }
+                // If everything is correct just continue
                 value.nextItem = lastListItem
                 lastListItem = value
                 drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: value)
@@ -121,7 +106,6 @@ class LayoutManager: NSLayoutManager {
         return layoutManagerDelegate?.paragraphStyle ?? NSParagraphStyle()
     }
     
-    //TODO: - Pro Absatz ein neues ItemList Object (ausgeschlossen wenn skipNextListMArker), NextListItem zuweisen, --> Weg von Mutable, sodass Änderungen auch direkt im vorherigen Object sind, Leere Zeile abhängig vom nextListItem der vorherigen Zeile rendern
     private func drawListMarkers(textStorage: NSTextStorage, listRange: NSRange, attributeValue: ListItem) {
         var lastLayoutRect: CGRect?
         var lastLayoutParaStyle: NSParagraphStyle?
