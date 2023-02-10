@@ -58,11 +58,14 @@ class LayoutManager: NSLayoutManager {
         for attr in listAttr.sorted(by: { lhs, rhs in
             lhs.key.location < rhs.key.location
         }).reversed() {
-            let range = attr.key
             let value = attr.value
-            let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
+            let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(attr.key) ?? []
             for line in lines.reversed() {
-                guard line.range.length > 0 else { continue }
+                var lineLength = line.range.length
+                var lineRange: NSRange {
+                        NSRange(location: line.range.location, length: lineLength)
+                }
+                guard lineRange.length > 0 else { continue }
                 // Removing multible line filler chars if text has been written in the line
                 let blankCharPositions = line.text.string[Character.blankLineFiller]
                 if blankCharPositions.count > 1 {
@@ -70,28 +73,30 @@ class LayoutManager: NSLayoutManager {
                         if pos == 0 { continue }
                         let charLocation = line.range.location + pos
                         textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                        lineLength -= 1
                     }
                 }
                 // Inserting line filler char if not present
                 if line.text.string[0] != Character.blankLineFiller {
                     let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
                     textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
+                    lineLength += 1
                 }
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
-                    drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: lastListItem!)
+                    drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
                     return
                 }
                 if lines.count > 1 {
                     let copy = value.deepCopy()
                     copy.nextItem = lastListItem
                     lastListItem = copy
-                    textStorage.addAttribute(.listItem, value: copy, range: line.range)
-                    drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: copy)
+                    textStorage.addAttribute(.listItem, value: copy, range: lineRange)
+                    drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
                     return
                 }
                 value.nextItem = lastListItem
                 lastListItem = value
-                drawListMarkers(textStorage: textStorage, listRange: range, attributeValue: value)
+                drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: value)
             }
         }
         
