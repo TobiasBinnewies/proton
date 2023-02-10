@@ -93,6 +93,11 @@ public class ListCommand: EditorCommand {
 //                .paragraphStyle: paragraphStyle
 //            ], at: selectedRange)
             editor.removeAttribute(.listItem, at: selectedRange)
+            let blankCharPositions = editor.attributedText.substring(from: selectedRange)[Character.blankLineFiller]
+            for pos in blankCharPositions {
+                let charLocation = selectedRange.location + pos
+                editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+            }
             return
         }
 
