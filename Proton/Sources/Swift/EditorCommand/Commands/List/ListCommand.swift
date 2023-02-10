@@ -68,7 +68,7 @@ public class ListCommand: EditorCommand {
     /// removed list formatting from the selected range of text.
     /// - Parameter editor: Editor to execute the command on.
     public func execute(on editor: EditorView) {
-        var selectedRange = editor.selectedRange
+        var selectedRange = editor.selectedRange.fitInRange(editor.contentLength)
         // Adjust to span entire line range if the selection starts in the middle of the line
         if let currentLine = editor.contentLinesInRange(NSRange(location: selectedRange.location, length: 0)).first,
            currentLine.range.length > 0 {

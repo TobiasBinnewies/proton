@@ -105,4 +105,25 @@ public extension NSRange {
         }
         return oppositeRanges
     }
+    
+    /// Fitting the range so its in the given range
+    func fitInRange(_ rawRange: NSRange) -> NSRange {
+        let range: NSRange = rawRange.getPositivLength()
+        
+        let newLocation = min(range.endLocation, max(range.location, self.location))
+        let newLength = min(range.endLocation - newLocation, max(range.location - newLocation, self.location < range.location ? self.length+(self.location-range.location) : self.length))
+        return NSRange(location: newLocation, length: newLength)
+    }
+    
+    func fitInRange(_ length: Int) -> NSRange {
+        return fitInRange(NSRange(location: 0, length: length))
+    }
+    
+    func getPositivLength() -> NSRange {
+        if self.length < 0 {
+            let absLength = abs(self.length)
+            return NSRange(location: self.location-absLength, length: absLength)
+        }
+        return self
+    }
 }
