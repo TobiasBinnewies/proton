@@ -70,6 +70,20 @@ public class ListTextProcessor: TextProcessing {
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
         case .enter:
+            
+            guard editor.contentLength > 0, let currentLine = editor.contentLinesInRange(editedRange).first, let listAttr = editor.attributedText.attribute(.listItem, at: currentLine.range.location, effectiveRange: nil) as? ListItem else { return }
+            
+            if modifierFlags == .shift {
+                handleShiftReturn(editor: editor, editedRange: editedRange, attrs: editor.typingAttributes)
+                return
+            }
+            
+            if currentLine.text.string == Character.blankLineFiller {
+                handleReturnOnEmptyLine(editor: editor, line: currentLine, listAttr: listAttr)
+                return
+            }
+            
+            
             guard editedRange.location > 1, editedRange.length > 0, let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem else { return }
             
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
@@ -150,6 +164,19 @@ public class ListTextProcessor: TextProcessing {
 //                self?.updateListItemIfRequired(editor: editor, editedRange: currentLine.range, indentMode: .outdent, attributeValue: attributeValue)
                 editor.replaceCharacters(in: NSRange(location: currentLine.range.location + 1, length: 1), with: "")
             }
+        }
+    }
+    
+    private func handleReturnOnEmptyLine(editor: EditorView, line: EditorLine, listAttr: ListItem) {
+        if listAttr.indentLvl > 1 {
+            listAttr.changeIndent(indentMode: .outdent)
+            return
+        }
+        editor.removeAttribute(.listItem, at: line.range)
+        let blankCharPositions = editor.attributedText.substring(from: line.range)[Character.blankLineFiller]
+        for pos in blankCharPositions {
+            let charLocation = line.range.location + pos
+            editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
         }
     }
 
