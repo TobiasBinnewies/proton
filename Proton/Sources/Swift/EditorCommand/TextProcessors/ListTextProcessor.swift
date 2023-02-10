@@ -256,6 +256,7 @@ public class ListTextProcessor: TextProcessing {
         var insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
         
         editor.replaceCharacters(in: insertMarkerInLastLine ? NSRange(location: editedRange.location-1, length: 0) : editedRange, with: marker)
+        editor.selectedRange = editedRange
 //        editor.selectedRange = editedRange.nextPosition
     }
 
