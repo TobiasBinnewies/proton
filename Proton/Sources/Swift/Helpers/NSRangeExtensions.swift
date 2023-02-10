@@ -22,6 +22,10 @@ import Foundation
 import UIKit
 
 public extension NSRange {
+    
+    init(location: Int, endLocation: Int) {
+        self.init(location: location, length: endLocation-location)
+    }
 
     /// Range with 0 location and length
     static var zero: NSRange {
@@ -73,5 +77,32 @@ public extension NSRange {
     /// - Important: The shifted range may or may not be valid in a given string. Validity of shifted range must always be checked at the usage site.
     func shiftedBy(_ shift: Int) -> NSRange {
         return NSRange(location: self.location + shift, length: length)
+    }
+    
+    /// Returns all ranges not included in the given ranges within the current range
+    func oppositeRanges(ranges: [NSRange]) -> [NSRange] {
+        guard ranges.count > 0 else { return [self] }
+        var oppositeRanges = [NSRange]()
+        let sortedRanges = ranges.sorted(by: { $0.location < $1.location })
+        var currentLocation = sortedRanges[0].location
+        let firstOppRange = NSRange(location: self.location, endLocation: currentLocation)
+        if firstOppRange.length > 0 {
+            oppositeRanges.append(firstOppRange)
+        }
+        for range in sortedRanges {
+            if currentLocation < range.location {
+                let rangeToAppend = NSRange(location: min(currentLocation, self.endLocation), endLocation: min(range.location, self.endLocation))
+                if rangeToAppend.length == 0 {
+                    break
+                }
+                oppositeRanges.append(rangeToAppend)
+            }
+            currentLocation = range.endLocation
+        }
+        let newLastOppRange = NSRange(location: currentLocation, endLocation: self.endLocation)
+        if newLastOppRange.length > 0 {
+            oppositeRanges.append(newLastOppRange)
+        }
+        return oppositeRanges
     }
 }

@@ -53,8 +53,16 @@ class LayoutManager: NSLayoutManager {
             listAttr[range] = value
         }
         
+        
+        // removing all List line fillers from non list lines
+        var i = 0
+        textStorage.fullRange.oppositeRanges(ranges: listAttr.map({return $0.key})).forEach { lineRange in
+            removeWrongLineFillerChars(textStorage: textStorage, inRange: lineRange, isListLine: false, lineLength: &i)
+        }
+        
+        
         var lastListItem: ListItem? = nil
-        for attr in listAttr.sorted(by: { $0.key.location < $1.key.location }).reversed() {
+        for attr in listAttr.sorted(by: { $0.key.location > $1.key.location }) {
             let value = attr.value
             let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key).filter({ $0.range.length > 0 })
             for line in lines.reversed() {
@@ -62,16 +70,7 @@ class LayoutManager: NSLayoutManager {
                 var lineRange: NSRange {
                         NSRange(location: line.range.location, length: lineLength)
                 }
-                // Removing multible line filler chars if text has been written in the line
-                let blankCharPositions = line.text.string[Character.blankLineFiller]
-                if blankCharPositions.count > 1 {
-                    for pos in blankCharPositions {
-                        if pos == 0 { continue }
-                        let charLocation = line.range.location + pos
-                        textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-                        lineLength -= 1
-                    }
-                }
+                removeWrongLineFillerChars(textStorage: textStorage, inRange: lineRange, isListLine: true, lineLength: &lineLength)
                 // Inserting line filler char if not present
                 if line.text.string[0] != Character.blankLineFiller {
                     let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
@@ -99,6 +98,17 @@ class LayoutManager: NSLayoutManager {
             }
         }
         
+    }
+    
+    // Removing multible line filler chars if text has been written in the line
+    private func removeWrongLineFillerChars(textStorage: NSTextStorage, inRange range: NSRange, isListLine: Bool, lineLength: inout Int) {
+        let blankCharPositions = textStorage.substring(from: range)[Character.blankLineFiller]
+        for pos in blankCharPositions {
+            if isListLine, pos == 0 { continue }
+            let charLocation = range.location + pos
+            textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+            lineLength -= 1
+        }
     }
     
     
