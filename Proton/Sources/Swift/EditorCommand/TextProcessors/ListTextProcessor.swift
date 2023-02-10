@@ -81,23 +81,24 @@ public class ListTextProcessor: TextProcessing {
             // Deleting the inserted "\n"
             let attrs = editor.attributedText.attributes(at: editedRange.location, effectiveRange: nil)
             editor.replaceCharacters(in: editedRange, with: "")
+            let updatedEditedRange = NSRange(location: editedRange.location, length: 0)
             
             if modifierFlags == .shift {
-                handleShiftReturn(editor: editor, editedRange: editedRange, attrs: editor.typingAttributes)
+                handleShiftReturn(editor: editor, editedRange: updatedEditedRange, attrs: editor.typingAttributes)
                 return
             }
             
             if currentLine.text.string == Character.blankLineFiller {
-                updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: .outdent)
-                editor.selectedRange = editedRange.shiftedBy(-1).fitInRange(editor.contentLength)
+                updateListItemIfRequired(editor: editor, editedRange: updatedEditedRange, indentMode: .outdent)
+                editor.selectedRange = updatedEditedRange.shiftedBy(-2).fitInRange(editor.contentLength)
                 return
             }
             
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
             
-            editor.replaceCharacters(in: NSRange(location: editedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
+            editor.replaceCharacters(in: NSRange(location: updatedEditedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
             
-            createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
+            createListItemInANewLine(editor: editor, editedRange: updatedEditedRange.nextPosition, attributeValue: attributedValue)
             
             
             // TODO: Insert ShiftReturn and Exit List
@@ -131,9 +132,8 @@ public class ListTextProcessor: TextProcessing {
     private func handleShiftReturn(editor: EditorView, editedRange: NSRange, attrs: [NSAttributedString.Key: Any]) {
         var attributes = attrs
         attributes[.skipNextListMarker] = 1
-        let newLineRange = NSRange(location: editedRange.location, length: 0)
         let newLine = NSAttributedString(string: "\n", attributes: attributes)
-        editor.replaceCharacters(in: newLineRange, with: newLine)
+        editor.replaceCharacters(in: editedRange, with: newLine)
         editor.selectedRange = editedRange.nextPosition
     }
 
