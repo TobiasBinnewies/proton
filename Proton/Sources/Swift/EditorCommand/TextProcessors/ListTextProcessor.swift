@@ -81,6 +81,8 @@ public class ListTextProcessor: TextProcessing {
             if currentLine.text.string == Character.blankLineFiller {
 //                handleReturnOnEmptyLine(editor: editor, line: currentLine, listAttr: listAttr)
                 updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: .outdent)
+                editor.replaceCharacters(in: NSRange(location: currentLine.range.location + 1, length: 1), with: "")
+                editor.selectedRange = editedRange.shiftedBy(-1)
                 return
             }
             
