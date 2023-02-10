@@ -63,6 +63,20 @@ class LayoutManager: NSLayoutManager {
             let lines = layoutManagerDelegate?.richTextView.contentLinesInRange(range) ?? []
             for line in lines.reversed() {
                 guard line.range.length > 0 else { continue }
+                // Removing multible line filler chars if text has been written in the line
+                let blankCharPositions = line.text.string[Character.blankLineFiller]
+                if blankCharPositions.count > 1 {
+                    for pos in blankCharPositions {
+                        if pos == 0 { continue }
+                        let charLocation = line.range.location + pos
+                        textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                    }
+                }
+                // Inserting line filler char if not present
+                if line.text.string[0] != Character.blankLineFiller {
+                    let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
+                    textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
+                }
                 if line.text.attribute(.skipNextListMarker, at: 0, effectiveRange: nil) != nil {
                     drawListMarkers(textStorage: textStorage, listRange: line.range, attributeValue: lastListItem!)
                     return

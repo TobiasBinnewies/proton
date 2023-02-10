@@ -34,10 +34,6 @@ import UIKit
 public class ListTextProcessor: TextProcessing {
     public let name = "listProcessor"
 
-    // Zero width space - used for laying out the list bullet/number in an empty line.
-    // This is required when using tab on a blank bullet line. Without this, layout calculations are not performed.
-    static let blankLineFiller = "\u{200B}"
-
     /// Initializes text processor.
     public init() { }
 
@@ -78,7 +74,7 @@ public class ListTextProcessor: TextProcessing {
             
 //            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
             
-            createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
+            createListItemInANewLine(editor: editor, editedRange: editedRange, attributeValue: attributedValue)
             
             
             // TODO: Insert ShiftReturn and Exit List
@@ -99,7 +95,7 @@ public class ListTextProcessor: TextProcessing {
         case .backspace:
             let attributedText = editor.attributedText
             guard editedRange.location > 0,
-                  attributedText.substring(from: editedRange) == ListTextProcessor.blankLineFiller,
+                  attributedText.substring(from: editedRange) == Character.blankLineFiller,
                   attributedText.attribute(.listItem, at: editedRange.location, effectiveRange: nil) != nil,
                   attributedText.substring(from: NSRange(location: editedRange.location - 1, length: 1)) == "\n"
             else { return }
@@ -148,7 +144,7 @@ public class ListTextProcessor: TextProcessing {
             attributeValue = previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil)
         }
 
-        if (currentLine.text.length == 0 || currentLine.text.string == ListTextProcessor.blankLineFiller),
+        if (currentLine.text.length == 0 || currentLine.text.string == Character.blankLineFiller),
            attributeValue != nil {
             executeOnDidProcess = { [weak self] editor in
 //                self?.updateListItemIfRequired(editor: editor, editedRange: currentLine.range, indentMode: .outdent, attributeValue: attributeValue)
@@ -162,7 +158,7 @@ public class ListTextProcessor: TextProcessing {
         executeOnDidProcess = nil
         guard editor.selectedRange.endLocation < editor.contentLength else { return }
         let lastChar = editor.attributedText.substring(from: NSRange(location: editor.selectedRange.location, length: 1))
-        if lastChar == ListTextProcessor.blankLineFiller {
+        if lastChar == Character.blankLineFiller {
             editor.selectedRange = editor.selectedRange.nextPosition
         }
         editor.typingAttributes[.skipNextListMarker] = nil
@@ -256,7 +252,7 @@ public class ListTextProcessor: TextProcessing {
 //        attrs[.paragraphStyle] = updatedStyle
 //        attrs[.listItem] = updatedStyle?.firstLineHeadIndent ?? 0 > 0.0 ? listAttributeValue : nil
         attrs[.listItem] = listAttributeValue
-        let marker = NSAttributedString(string: ListTextProcessor.blankLineFiller, attributes: attrs)
+        let marker = NSAttributedString(string: String(Character.blankLineFiller), attributes: attrs)
         editor.replaceCharacters(in: editedRange, with: marker)
         editor.selectedRange = editedRange.nextPosition
     }

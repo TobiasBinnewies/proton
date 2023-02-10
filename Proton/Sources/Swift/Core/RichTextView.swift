@@ -370,7 +370,7 @@ class RichTextView: AutogrowingTextView {
         else {
             // if the character getting deleted is a list item spacer, do a double delete
             let textToBeDeleted = attributedText.substring(from: NSRange(location: proposedRange.location, length: 1))
-            if textToBeDeleted == ListTextProcessor.blankLineFiller {
+            if textToBeDeleted == Character.blankLineFiller {
                 super.deleteBackward()
             }
             super.deleteBackward()

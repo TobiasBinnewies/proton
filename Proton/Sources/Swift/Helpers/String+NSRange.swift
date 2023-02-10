@@ -21,7 +21,7 @@
 import Foundation
 
 public extension String {
-
+    
     /// Converts given Range to NSRange in this string.
     /// - Parameter range: Range to convert.
     func makeNSRange(from range: Range<String.Index>) -> NSRange {
@@ -61,10 +61,34 @@ public extension String {
         return ranges
     }
     
+    /// Returns the char at the given position
     subscript(offset: Int) -> Character? {
         if offset < 0 || offset > self.count-1 {
             return nil
         }
         return self[index(startIndex, offsetBy: offset)]
     }
+    
+    /// Returns all postions the given char is present
+    subscript (char: Character) -> [Int] {
+        var idxArr: [Int] = []
+        var idx = 0
+        for c in self {
+            if c == char {
+                idxArr.append(idx)
+            }
+            idx += 1
+        }
+        return idxArr
+    }
+    
+    static func ==(lhs: String, rhs: Character) -> Bool {
+        return lhs == String(rhs)
+    }
+}
+
+extension Character {
+    // Zero width space - used for laying out the list bullet/number in an empty line.
+    // This is required when using tab on a blank bullet line. Without this, layout calculations are not performed.
+    static let blankLineFiller: Character = "\u{200B}"
 }
