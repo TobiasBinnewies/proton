@@ -298,7 +298,7 @@ public class ListTextProcessor: TextProcessing {
 //        let updatedStyle = updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
 //        attrs[.paragraphStyle] = updatedStyle
 //        attrs[.listItem] = updatedStyle?.firstLineHeadIndent ?? 0 > 0.0 ? listAttributeValue : nil
-        attrs[.listItem] = listAttributeValue
+        attrs[.listItem] = listAttributeValue?.deepCopy()
         let marker = NSAttributedString(string: String(Character.blankLineFiller), attributes: attrs)
         
         var insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
