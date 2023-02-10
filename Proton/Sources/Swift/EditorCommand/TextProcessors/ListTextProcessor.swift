@@ -72,10 +72,8 @@ public class ListTextProcessor: TextProcessing {
         case .enter:
             
             guard
-                editedRange.location > 1,
-                editedRange.length > 0,
-                let currentLine = editor.contentLinesInRange(editedRange.shiftedBy(-1)).first,
-                let attributedValue = editor.attributedText.attribute(.listItem, at: editedRange.location-1, effectiveRange: nil) as? ListItem
+                let currentLine = editor.contentLinesInRange(NSRange(location: max(0, editedRange.location-1), length: 0)).first,
+                let attributedValue = currentLine.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             else { return }
             
             // Deleting the inserted "\n"
@@ -93,8 +91,6 @@ public class ListTextProcessor: TextProcessing {
                 editor.selectedRange = updatedEditedRange.shiftedBy(-2).fitInRange(editor.contentLength)
                 return
             }
-            
-//            editor.replaceCharacters(in: editedRange, with: ListTextProcessor.blankLineFiller)
             
             editor.replaceCharacters(in: NSRange(location: updatedEditedRange.location, length: 0), with: NSAttributedString(string: "\n", attributes: attrs))
             
