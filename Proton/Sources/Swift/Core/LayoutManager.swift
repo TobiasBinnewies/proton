@@ -152,6 +152,7 @@ class LayoutManager: NSLayoutManager {
                 let indentation = CGFloat(levelToSet) * listIndent
                 currentStyle.firstLineHeadIndent = indentation
                 currentStyle.headIndent = indentation
+                currentStyle.lineSpacing = 40
                 textStorage.addAttribute(.paragraphStyle, value: currentStyle, range: currentRange)
             }
         }
