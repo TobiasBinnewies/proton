@@ -57,7 +57,7 @@ class LayoutManager: NSLayoutManager {
         var lastListItem: ListItem? = nil
         for attr in listAttr.sorted(by: { $0.key.location > $1.key.location }) {
             let value = attr.value
-            let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key).filter({ $0.range.length > 0 })
+            let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key)
             for line in lines.reversed() {
                 var lineLength = line.range.length
                 var lineRange: NSRange {

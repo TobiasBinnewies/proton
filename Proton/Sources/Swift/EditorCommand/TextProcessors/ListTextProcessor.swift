@@ -154,7 +154,7 @@ public class ListTextProcessor: TextProcessing {
 
     // TODO: Not working now (probably obsolet)
     private func exitListsIfRequired(editor: EditorView, editedRange: NSRange) {
-        guard let currentLine = editor.contentLinesInRange(editedRange).first,
+        guard let currentLine = editor.currentContentLine(from: editedRange.location),
               let previousLine = editor.previousContentLine(from: currentLine.range.location)
         else { return }
 

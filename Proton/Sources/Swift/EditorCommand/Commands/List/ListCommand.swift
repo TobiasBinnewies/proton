@@ -70,7 +70,7 @@ public class ListCommand: EditorCommand {
     public func execute(on editor: EditorView) {
         var selectedRange = editor.selectedRange.fitInRange(editor.contentLength)
         // Adjust to span entire line range if the selection starts in the middle of the line
-        if let currentLine = editor.contentLinesInRange(NSRange(location: selectedRange.location, length: 0)).first,
+        if let currentLine = editor.currentContentLine(from: selectedRange.location),
            currentLine.range.length > 0 {
             let location = currentLine.range.location
             var length = max(currentLine.range.length, selectedRange.length + (selectedRange.location - currentLine.range.location))

@@ -211,16 +211,21 @@ class RichTextView: AutogrowingTextView {
     func contentLinesInRange(_ range: NSRange) -> [EditorLine] {
         guard range.location >= 0, range.location <= self.attributedText.length else { return [] }
         var lines = [EditorLine]()
+        let text = self.attributedText.string
+        let updatedRange: NSRange = {
+            if text[range.endLocation-1] == "\n" {
+                return NSRange(location: range.location, length: range.length-1)
+            }
+            return range
+        }()
         
-        var startingLocation = range.location
-        let endLocation = max(startingLocation, range.endLocation)
-        
-        while startingLocation <= endLocation, startingLocation <= self.attributedText.length {
+        var startingLocation = updatedRange.location
+        let endLocation = max(startingLocation, updatedRange.endLocation)
+        while startingLocation <= endLocation, startingLocation <= text.count {
             let paraRange = rangeOfParagraph(at: startingLocation)!
             lines.append(EditorLine(text: self.attributedText.attributedSubstring(from: paraRange), range: paraRange))
             startingLocation = paraRange.endLocation + 1
         }
-        
         return lines
     }
     
