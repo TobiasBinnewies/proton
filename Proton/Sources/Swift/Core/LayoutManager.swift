@@ -323,13 +323,14 @@ class LayoutManager: NSLayoutManager {
         //        drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
     }
     
-    private func drawListItem(level: Int, previousLevel: Int, index: Int, rect: CGRect, paraStyle: NSParagraphStyle, font: UIFont, attributeValue: Any?) {
+    private func drawListItem(level: Int, previousLevel: Int, index: Int, rect: CGRect, paraStyle: NSParagraphStyle, font: UIFont, attributeValue: ListItem) {
         guard level > 0 else { return }
         
         let color = layoutManagerDelegate?.textColor ?? self.defaultBulletColor
         color.set()
         
-        let marker = layoutManagerDelegate?.listMarkerForItem(at: index, level: level, previousLevel: previousLevel, attributeValue: attributeValue) ?? .string(NSAttributedString(string: "*"))
+//        let marker = layoutManagerDelegate?.listMarkerForItem(at: index, level: level, previousLevel: previousLevel, attributeValue: attributeValue) ?? .string(NSAttributedString(string: "*"))
+        let marker = attributeValue.symbol.value(at: index)
         
         let listMarkerImage: UIImage
         let markerRect: CGRect
