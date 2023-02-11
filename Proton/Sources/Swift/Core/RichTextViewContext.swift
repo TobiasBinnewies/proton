@@ -34,30 +34,32 @@ class RichTextViewContext: NSObject, UITextViewDelegate {
         guard let richTextView = textView as? RichTextView else { return }
         let range = textView.selectedRange
 
-        resetAttachmentSelection(textView)
-        guard range.length > 0 else {
-            if textView.attributedText.length == 0 {
-                richTextView.resetTypingAttributes()
-            }
-            var attributes = richTextView.typingAttributes
-            let contentType = attributes[.blockContentType] as? EditorContent.Name ?? .unknown
-            attributes[.blockContentType] = nil
-            richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeSelection: range, attributes: attributes, contentType: contentType)
-            return
-        }
-
-        let substring = textView.attributedText.attributedSubstring(from: range)
-
-        // Mark attachments as selected if there are any in the selected range
-        substring.enumerateAttribute(.attachment, in: substring.fullRange, options: .longestEffectiveRangeNotRequired) { attachment, range, _ in
-            if let attachment = attachment as? Attachment {
-                attachment.isSelected = true
-            }
-        }
-
-        var attributes = substring.attributes(at: 0, effectiveRange: nil)
+//        resetAttachmentSelection(textView)
+//        guard range.length > 0 else {
+//            if textView.attributedText.length == 0 {
+//                richTextView.resetTypingAttributes()
+//            }
+//            var attributes = richTextView.typingAttributes
+//            let contentType = attributes[.blockContentType] as? EditorContent.Name ?? .unknown
+//            attributes[.blockContentType] = nil
+//            richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeSelection: range, attributes: attributes, contentType: contentType)
+//            return
+//        }
+//
+//        let substring = textView.attributedText.attributedSubstring(from: range)
+//
+//        // Mark attachments as selected if there are any in the selected range
+//        substring.enumerateAttribute(.attachment, in: substring.fullRange, options: .longestEffectiveRangeNotRequired) { attachment, range, _ in
+//            if let attachment = attachment as? Attachment {
+//                attachment.isSelected = true
+//            }
+//        }
+//
+//        var attributes = substring.attributes(at: 0, effectiveRange: nil)
+//        let contentType = attributes[.blockContentType] as? EditorContent.Name ?? .unknown
+//        attributes[.blockContentType] = nil
+        let attributes = range.length == 0 ? richTextView.typingAttributes : textView.attributedText.attributedSubstring(from: range).attributes(at: 0, effectiveRange: nil)
         let contentType = attributes[.blockContentType] as? EditorContent.Name ?? .unknown
-        attributes[.blockContentType] = nil
         richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeSelection: range, attributes: attributes, contentType: contentType)
     }
 
