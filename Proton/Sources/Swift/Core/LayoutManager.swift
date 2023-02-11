@@ -80,7 +80,7 @@ class LayoutManager: NSLayoutManager {
             let prevLineListItem = prevLine?.range.length == 0 ? nil : prevLine?.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             
             // Insert empty line before first list line
-            if let prevLine = prevLine, prevLineListItem == nil {
+            if let prevLine = prevLine, prevLine.range.length > 0, prevLineListItem == nil {
                 textStorage.replaceCharacters(in: NSRange(location: prevLine.range.endLocation, length: 0), with: "\n")
                 layoutManagerDelegate!.shiftSelection(1)
                 return
