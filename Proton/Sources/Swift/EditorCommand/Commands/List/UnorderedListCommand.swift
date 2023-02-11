@@ -17,8 +17,7 @@ public class UnorderedListCommand: ListCommand {
     
     public override func execute(on editor: EditorView) {
         // remove list if existing
-        if editor.contentLength > 0,
-           editor.attributedText.attribute(.listItem, at: min(editor.contentLength - 1, editor.selectedRange.location), effectiveRange: nil) != nil {
+        if let line = editor.currentContentLine(from: editor.selectedRange.location), line.range.length > 0, line.text.attribute(.listItem, at: 0, effectiveRange: nil) != nil {
             self.attributeValue = nil
         } else {
             self.attributeValue = ListItem(indentLvl: 1, symbol: SquareBulletSequenceGenerator())
