@@ -49,8 +49,8 @@ class LayoutManager: NSLayoutManager {
         // Adding one ListItem-Reference per Line
         
         var lastListItem: ListItem? = nil
-        let allLines = layoutManagerDelegate!.richTextView.contentLinesInRange(textStorage.fullRange).sorted(by: { $0.range.location < $1.range.location })
-        for i in allLines.count-1...0 {
+        let allLines = layoutManagerDelegate!.richTextView.contentLinesInRange(textStorage.fullRange).sorted(by: { $0.range.location > $1.range.location })
+        for i in 0..<allLines.count {
             let line = allLines[i]
             let lineRange = line.range
             let lineListItem = line.range.length == 0 ? nil : line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
@@ -61,10 +61,10 @@ class LayoutManager: NSLayoutManager {
             
             let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
             
-            let nextLine = i+1 == allLines.count ? nil : allLines[i+1]
+            let nextLine = i == 0 ? nil : allLines[i-1]
             let nextLineListItem = nextLine?.range.length == 0 ? nil : nextLine?.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             
-            let prevLine = i == 0 ? nil : allLines[i-1]
+            let prevLine = i+1 == allLines.count ? nil : allLines[i+1]
             let prevLineListItem = prevLine?.range.length == 0 ? nil : prevLine?.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             
             // Insert empty line before first list line
