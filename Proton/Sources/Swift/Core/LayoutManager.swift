@@ -35,6 +35,8 @@ protocol LayoutManagerDelegate: AnyObject {
     func listMarkerForItem(at index: Int, level: Int, previousLevel: Int, attributeValue: Any?) -> ListLineMarker
     
     func shiftSelection(_ value: Int)
+    func setSelection()
+    func getCurrentSelection() -> NSRange
 }
 
 class LayoutManager: NSLayoutManager {
@@ -67,6 +69,7 @@ class LayoutManager: NSLayoutManager {
                     let charLocation = line.range.location + pos
                     textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
                     layoutManagerDelegate!.shiftSelection(-1)
+                    layoutManagerDelegate!.setSelection()
                 }
                 continue
             }
@@ -82,7 +85,10 @@ class LayoutManager: NSLayoutManager {
             // Insert empty line before first list line
             if let prevLine = prevLine, prevLine.range.length > 0, prevLineListItem == nil {
                 textStorage.replaceCharacters(in: NSRange(location: prevLine.range.endLocation, length: 0), with: "\n")
-                layoutManagerDelegate!.shiftSelection(1)
+                if layoutManagerDelegate!.getCurrentSelection().location > prevLine.range.location {
+                    layoutManagerDelegate!.shiftSelection(1)
+                    layoutManagerDelegate!.setSelection()
+                }
                 return
             }
             // Insert empty line after last list line
@@ -91,6 +97,10 @@ class LayoutManager: NSLayoutManager {
                 textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\(Character.blankLineFiller)\n")
                 let paraStyle = layoutManagerDelegate!.paragraphStyle!
                 textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: nextLine.range.location, length: 1))
+                if layoutManagerDelegate!.getCurrentSelection().location > nextLine.range.location {
+                    layoutManagerDelegate!.shiftSelection(2)
+                    layoutManagerDelegate!.setSelection()
+                }
                 return
             }
             // Removing multible line filler chars if text has been written in the line
@@ -100,7 +110,10 @@ class LayoutManager: NSLayoutManager {
                     if !skipNextLineMarker, pos == 0 { continue }
                     let charLocation = line.range.location + pos
                     textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-                    layoutManagerDelegate!.shiftSelection(-1)
+                    if layoutManagerDelegate!.getCurrentSelection().location > charLocation {
+                        layoutManagerDelegate!.shiftSelection(-1)
+                        layoutManagerDelegate!.setSelection()
+                    }
                 }
                 return
             }
@@ -109,6 +122,7 @@ class LayoutManager: NSLayoutManager {
                 let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
                 textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
                 layoutManagerDelegate!.shiftSelection(1)
+                layoutManagerDelegate!.setSelection()
                 return
             }
             // Ignoring lines with skipNextLineMarker
