@@ -78,7 +78,7 @@ public class ListCommand: EditorCommand {
     /// Executes the command with value of `attributeValue` for `.listItem` attribute. If the `attributeValue` is nil, executing
     /// removed list formatting from the selected range of text.
     /// - Parameter editor: Editor to execute the command on.
-    public func execute(on editor: EditorView) {
+    func execute(on editor: EditorView) {
         var selectedRange = editor.selectedRange.fitInRange(editor.contentLength)
         // Adjust to span entire line range if the selection starts in the middle of the line
         if let currentLine = editor.currentContentLine(from: selectedRange.location),

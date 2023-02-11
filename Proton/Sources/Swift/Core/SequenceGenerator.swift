@@ -54,7 +54,7 @@ public struct SquareBulletSequenceGenerator: SequenceGenerator {
     public init() { }
     public func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
-        let text = "■"
+        let text = "▣"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
@@ -63,7 +63,7 @@ public struct DotBulletSequenceGenerator: SequenceGenerator {
     public init() { }
     public func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
-        let text = "●"
+        let text = "◉"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
