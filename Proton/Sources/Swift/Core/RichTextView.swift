@@ -66,7 +66,7 @@ class RichTextView: AutogrowingTextView {
         }
     }
     
-    private var selectedRangeLocation: Int = -1
+    private var selectedRangeShift: Int = 0
 //    override var selectedRange: NSRange {
 //        didSet {
 //            if selectedRange.length == 0 {
@@ -80,14 +80,11 @@ class RichTextView: AutogrowingTextView {
 //    }
     
     func shiftSelection(_ value: Int) {
-        if selectedRangeLocation == -1 {
-            selectedRangeLocation = selectedRange.location
-        }
         selectedRangeLocation += value
     }
     
     func setSelection() {
-        selectedRange = NSRange(location: selectedRangeLocation, length: 0)
+        selectedRange = NSRange(location: selectedRange.location + selectedRangeLocation, length:selectedRange.length)
     }
 
     override var selectedTextRange: UITextRange? {
