@@ -152,7 +152,7 @@ class LayoutManager: NSLayoutManager {
             
         }
         
-        for lineValue in lineItems.reversed() {
+        for lineValue in lineItems.sorted(by: {$0.key.range.location < $1.key.range.location }) {
             let line = lineValue.key
             let item = lineValue.value
             guard let item = item else { continue }
