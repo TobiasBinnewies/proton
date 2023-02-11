@@ -113,7 +113,7 @@ public class ListTextProcessor: TextProcessing {
                 return
             }
             
-            createListItemInANewLine(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
+            createListItem(editor: editor, editedRange: editedRange.nextPosition, attributeValue: attributedValue)
             
             
             // TODO: Insert ShiftReturn and Exit List
@@ -234,7 +234,7 @@ public class ListTextProcessor: TextProcessing {
             if line.text.length == 0
 //                || line.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil
             {
-                createListItemInANewLine(editor: editor, editedRange: lineRange, attributeValue: listItem)
+                createListItem(editor: editor, editedRange: lineRange, attributeValue: listItem)
                 continue
             }
 
@@ -287,16 +287,21 @@ public class ListTextProcessor: TextProcessing {
 //    }
 
     // MARK: May produce errors (could not remove list)
-    func createListItemInANewLine(editor: EditorView, editedRange: NSRange, attributeValue: ListItem?) {
+    func createListItem(editor: EditorView, editedRange: NSRange, attributeValue: ListItem?) {
         var listAttributeValue = attributeValue
 //        if listAttributeValue == nil, editedRange.location > 0 {
 //            listAttributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil) as? ListItem
 //        }
 //        listAttributeValue = listAttributeValue ?? "listItemValue" // default value in case no other value can be obtained.
         
-        if listAttributeValue == nil {
+        guard let listAttributeValue = listAttributeValue else {
             let lineRange = editor.currentContentLine(from: editedRange.location)!.range
             removeListItem(editor: editor, lineRange: lineRange)
+            return
+        }
+        
+        if editedRange.length > 0 {
+            editor.addAttribute(.listItem, value: listAttributeValue, at: editedRange)
         }
 
         var attrs = editor.typingAttributes
@@ -304,7 +309,7 @@ public class ListTextProcessor: TextProcessing {
 //        let updatedStyle = updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: indentMode)
 //        attrs[.paragraphStyle] = updatedStyle
 //        attrs[.listItem] = updatedStyle?.firstLineHeadIndent ?? 0 > 0.0 ? listAttributeValue : nil
-        attrs[.listItem] = listAttributeValue?.deepCopy()
+        attrs[.listItem] = listAttributeValue.deepCopy()
         let marker = NSAttributedString(string: String(Character.blankLineFiller), attributes: attrs)
         
         var insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
@@ -316,6 +321,12 @@ public class ListTextProcessor: TextProcessing {
     
     func removeListItem(editor: EditorView, lineRange: NSRange) {
         editor.removeAttribute(.listItem, at: lineRange)
+        
+        let nextCharRange = NSRange(location: lineRange.endLocation+1, length: 1)
+        if editor.attributedText.substring(from: nextCharRange) == "\n" {
+            editor.removeAttribute(.listItem, at: nextCharRange)
+        }
+        
         // remove list attribute from new line char in the previous line
         if let previousLine = editor.previousContentLine(from: lineRange.location) {
             editor.removeAttribute(.listItem, at: NSRange(location: previousLine.range.endLocation, length: 1))

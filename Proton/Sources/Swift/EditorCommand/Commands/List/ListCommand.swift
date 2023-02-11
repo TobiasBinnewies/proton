@@ -81,9 +81,12 @@ public class ListCommand: EditorCommand {
             }
             selectedRange = NSRange(location: location, length: length)
         }
+        
+        ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
+        return
 
         guard selectedRange.length > 0 else {
-            ListTextProcessor().createListItemInANewLine(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
+            ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
             return
         }
 
