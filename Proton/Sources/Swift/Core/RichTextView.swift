@@ -634,6 +634,9 @@ extension RichTextView: TextStorageDelegate {
 }
 
 extension RichTextView: LayoutManagerDelegate {
+    func getCurrentSelection() -> NSRange {
+        self.selectedRange
+    }
     
     var richTextView: RichTextView {
         self
