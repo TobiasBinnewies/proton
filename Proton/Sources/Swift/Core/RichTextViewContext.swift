@@ -61,8 +61,6 @@ class RichTextViewContext: NSObject, UITextViewDelegate {
         let attributes = range.length == 0 ? richTextView.typingAttributes : textView.attributedText.attributedSubstring(from: range).attributes(at: 0, effectiveRange: nil)
         let contentType = attributes[.blockContentType] as? EditorContent.Name ?? .unknown
         richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeSelection: range, attributes: attributes, contentType: contentType)
-        
-        richTextView.setSelection()
     }
 
     func resetAttachmentSelection(_ textView: UITextView) {
