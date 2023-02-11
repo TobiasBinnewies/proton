@@ -64,10 +64,18 @@ class LayoutManager: NSLayoutManager {
                 var lineRange: NSRange {
                         NSRange(location: lineLocation, length: lineLength)
                 }
+                // Insert empty line before first list line
                 if let previousLine = layoutManagerDelegate!.richTextView.previousContentLine(from: line.range.location),
                    previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil,
                    previousLine.range.length > 0 {
                     textStorage.replaceCharacters(in: NSRange(location: previousLine.range.endLocation, length: 0), with: "\n")
+                    lineLocation += 1
+                }
+                // Insert empty line after last list line
+                if let nextLine = layoutManagerDelegate!.richTextView.nextContentLine(from: line.range.location),
+                   nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil,
+                   nextLine.range.length > 0 {
+                    textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\n")
                 }
                 let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
@@ -89,7 +97,7 @@ class LayoutManager: NSLayoutManager {
                 // Ignoring lines with skipNextLineMarker
                 if skipNextLineMarker {
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
-                    return
+                    continue
                 }
                 // Adding one ListItem-Reference per line
                 if lines.count > 1 {
@@ -98,7 +106,7 @@ class LayoutManager: NSLayoutManager {
                     lastListItem = copy
                     textStorage.addAttribute(.listItem, value: copy, range: lineRange)
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
-                    return
+                    continue
                 }
                 // If everything is correct just continue
                 value.nextItem = lastListItem
