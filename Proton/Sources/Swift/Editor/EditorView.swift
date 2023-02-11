@@ -649,6 +649,10 @@ open class EditorView: UIView {
     public func previousContentLine(from location: Int) -> EditorLine? {
         return richTextView.previousContentLine(from: location)
     }
+    
+    public func currentContentLine(from location: Int) -> EditorLine? {
+        return richTextView.currentContentLine(from: location)
+    }
 
     /// Gets the next line of content from the given location. A content line is defined by the presence of a
     /// newline character.

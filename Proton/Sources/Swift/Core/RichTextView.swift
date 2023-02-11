@@ -224,6 +224,10 @@ class RichTextView: AutogrowingTextView {
 
         return lines
     }
+    
+    func currentContentLine(from location: Int) -> EditorLine? {
+        return contentLinesInRange(NSRange(location: location, length: 0)).first(where: {$0.range.length > 0})
+    }
 
     func rangeOfParagraph(at location: Int) -> NSRange {
         guard let position = self.position(from: beginningOfDocument, offset: location),

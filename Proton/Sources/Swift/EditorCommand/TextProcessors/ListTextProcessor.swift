@@ -254,23 +254,14 @@ public class ListTextProcessor: TextProcessing {
 //                return
 //            }
 
-            editor.addAttribute(.listItem, value: listItem, at: lineRange)
 
             // Remove listItem attribute if indented all the way back
             if listItem.indentLvl == 0 {
                 // TODO: check if lineRange or line.range needs to be used here
-                editor.removeAttribute(.listItem, at: lineRange)
-                // remove list attribute from new line char in the previous line
-                if let previousLine = previousLine {
-                    editor.removeAttribute(.listItem, at: NSRange(location: previousLine.range.endLocation, length: 1))
-                }
-                let blankCharPositions = editor.attributedText.substring(from: lineRange)[Character.blankLineFiller]
-                for pos in blankCharPositions {
-                    let charLocation = lineRange.location + pos
-                    editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-                }
-                editor.selectedRange = NSRange(location: lineRange.location, length: 0)
+                removeListItem(editor: editor, lineRange: lineRange)
+                return
             }
+            editor.addAttribute(.listItem, value: listItem, at: lineRange)
 //            indentChildLists(editor: editor, editedRange: line.range, originalParaStyle: paraStyle, indentMode: indentMode)
         }
     }
@@ -298,10 +289,15 @@ public class ListTextProcessor: TextProcessing {
     // MARK: May produce errors (could not remove list)
     func createListItemInANewLine(editor: EditorView, editedRange: NSRange, attributeValue: ListItem?) {
         var listAttributeValue = attributeValue
-        if listAttributeValue == nil, editedRange.location > 0 {
-            listAttributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil) as? ListItem
-        }
+//        if listAttributeValue == nil, editedRange.location > 0 {
+//            listAttributeValue = editor.attributedText.attribute(.listItem, at: editedRange.location - 1, effectiveRange: nil) as? ListItem
+//        }
 //        listAttributeValue = listAttributeValue ?? "listItemValue" // default value in case no other value can be obtained.
+        
+        if listAttributeValue == nil {
+            let lineRange = editor.currentContentLine(from: editedRange.location)!.range
+            removeListItem(editor: editor, lineRange: lineRange)
+        }
 
         var attrs = editor.typingAttributes
 //        let paraStyle = attrs[.paragraphStyle] as? NSParagraphStyle
@@ -316,6 +312,20 @@ public class ListTextProcessor: TextProcessing {
         editor.replaceCharacters(in: insertMarkerInLastLine ? NSRange(location: editedRange.location-1, length: 0) : editedRange, with: marker)
         editor.selectedRange = editedRange.fitInRange(editor.contentLength)
 //        editor.selectedRange = editedRange.nextPosition
+    }
+    
+    func removeListItem(editor: EditorView, lineRange: NSRange) {
+        editor.removeAttribute(.listItem, at: lineRange)
+        // remove list attribute from new line char in the previous line
+        if let previousLine = editor.previousContentLine(from: lineRange.location) {
+            editor.removeAttribute(.listItem, at: NSRange(location: previousLine.range.endLocation, length: 1))
+        }
+        let blankCharPositions = editor.attributedText.substring(from: lineRange)[Character.blankLineFiller]
+        for pos in blankCharPositions {
+            let charLocation = lineRange.location + pos
+            editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+        }
+        editor.selectedRange = NSRange(location: lineRange.location, length: 0)
     }
 
 //    func updatedParagraphStyle(paraStyle: NSParagraphStyle?, listLineFormatting: LineFormatting, indentMode: Indentation) -> NSParagraphStyle? {
