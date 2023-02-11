@@ -302,6 +302,8 @@ public class ListTextProcessor: TextProcessing {
         
         if editedRange.length > 0 {
             editor.addAttribute(.listItem, value: listAttributeValue, at: editedRange)
+            editor.selectedRange = editedRange.fitInRange(editor.contentLength)
+            return
         }
 
         var attrs = editor.typingAttributes
@@ -319,10 +321,14 @@ public class ListTextProcessor: TextProcessing {
 //        editor.selectedRange = editedRange.nextPosition
     }
     
-    func removeListItem(editor: EditorView, lineRange: NSRange) {
+    func removeListItem(editor: EditorView, lineRange range: NSRange) {
+        var lineLength = range.length
+        var lineRange: NSRange {
+            NSRange(location: range.location, length: lineLength)
+        }
         editor.removeAttribute(.listItem, at: lineRange)
         
-        let nextCharRange = NSRange(location: lineRange.endLocation+1, length: 1)
+        let nextCharRange = NSRange(location: lineRange.endLocation, length: 1)
         if editor.attributedText.string[nextCharRange.location] == "\n" {
             editor.removeAttribute(.listItem, at: nextCharRange)
         }
@@ -335,6 +341,10 @@ public class ListTextProcessor: TextProcessing {
         for pos in blankCharPositions {
             let charLocation = lineRange.location + pos
             editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+            lineLength -= 1
+        }
+        if lineLength == 0 {
+            
         }
         editor.selectedRange = NSRange(location: lineRange.location, length: 0)
     }

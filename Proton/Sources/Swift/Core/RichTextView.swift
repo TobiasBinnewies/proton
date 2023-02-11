@@ -209,55 +209,50 @@ class RichTextView: AutogrowingTextView {
     }
 
     func contentLinesInRange(_ range: NSRange) -> [EditorLine] {
+        guard range.location >= 0, range.location <= self.attributedText.length else { return [] }
         var lines = [EditorLine]()
-
-        var startingRange = NSRange(location: range.location, length: 0)
-        let endLocation = max(startingRange.location, range.location + range.length - 1)
-
-        while startingRange.location <= endLocation {
-            let paraRange = rangeOfParagraph(at: startingRange.location)
-            let text = self.attributedText.attributedSubstring(from: paraRange)
-            let editorLine = EditorLine(text: text, range: paraRange)
-            lines.append(editorLine)
-            startingRange = NSRange(location: paraRange.length + paraRange.location + 1, length: 0)
+        
+        var startingLocation = range.location
+        let endLocation = max(startingLocation, range.endLocation)
+        
+        while startingLocation <= endLocation, startingLocation <= self.attributedText.length {
+            let paraRange = rangeOfParagraph(at: startingLocation)!
+            lines.append(EditorLine(text: self.attributedText.attributedSubstring(from: paraRange), range: paraRange))
+            startingLocation = paraRange.endLocation + 1
         }
-
+        
         return lines
     }
     
     func currentContentLine(from location: Int) -> EditorLine? {
-        return contentLinesInRange(NSRange(location: location, length: 0)).first(where: {$0.range.length > 0})
+        guard location >= 0, location <= self.attributedText.length else { return nil }
+        let range = rangeOfParagraph(at: location)!
+        return EditorLine(text: self.attributedText.attributedSubstring(from: range), range: range)
     }
-
-    func rangeOfParagraph(at location: Int) -> NSRange {
-        guard let position = self.position(from: beginningOfDocument, offset: location),
-              let paraRange = tokenizer.rangeEnclosingPosition(position, with: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.backward.rawValue)),
-              let range = paraRange.toNSRange(in: self)
-        else {
-            return NSRange(location: location, length: 0)
-        }
-        return range
-    }
-
+    
     func previousContentLine(from location: Int) -> EditorLine? {
-        let currentLineRange = rangeOfParagraph(at: location)
-        guard let position = self.position(from: beginningOfDocument, offset: currentLineRange.location - 1),
-              let paraRange = tokenizer.rangeEnclosingPosition(position, with: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.backward.rawValue)),
-              let range = paraRange.toNSRange(in: self)
-        else { return nil }
-        
-        return EditorLine(text: attributedText.attributedSubstring(from: range), range: range)
+        guard location >= 0, location <= self.attributedText.length else { return nil }
+        let range = rangeOfParagraph(at: location)!
+        let prevRange = rangeOfParagraph(at: range.location-1)
+        guard let prevRange = prevRange else { return nil }
+        return EditorLine(text: self.attributedText.attributedSubstring(from: prevRange), range: prevRange)
     }
-
-    ///  > Warning: Returns nil if the cursor is in the end of a line
+    
     func nextContentLine(from location: Int) -> EditorLine? {
-        let currentLineRange = rangeOfParagraph(at: location)
-        guard let position = self.position(from: beginningOfDocument, offset: currentLineRange.endLocation + 1),
-              let paraRange = tokenizer.rangeEnclosingPosition(position, with: .paragraph, inDirection: UITextDirection(rawValue: UITextStorageDirection.forward.rawValue)),
-              let range = paraRange.toNSRange(in: self)
-        else { return nil }
-        
-        return EditorLine(text: attributedText.attributedSubstring(from: range), range: range)
+        guard location >= 0, location <= self.attributedText.length else { return nil }
+        let range = rangeOfParagraph(at: location)!
+        let nextRange = rangeOfParagraph(at: range.endLocation+1)
+        guard let nextRange = nextRange else { return nil }
+        return EditorLine(text: self.attributedText.attributedSubstring(from: nextRange), range: nextRange)
+    }
+    
+    private func rangeOfParagraph(at location: Int) -> NSRange? {
+        guard location >= 0, location <= self.attributedText.length else { return nil }
+        let text = self.attributedText.string
+        let newLineCharPostions = text["\n"]
+        let endLocation = newLineCharPostions.first(where: {$0 >= location}) ?? text.count
+        let startLocation = (newLineCharPostions.last(where: {$0 < location}) ?? -1) + 1
+        return NSRange(location: startLocation, endLocation: endLocation)
     }
 
     override var keyCommands: [UIKeyCommand]? {
