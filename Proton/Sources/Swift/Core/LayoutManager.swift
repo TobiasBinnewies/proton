@@ -47,79 +47,89 @@ class LayoutManager: NSLayoutManager {
         guard let textStorage = self.textStorage else { return }
         
         // Adding one ListItem-Reference per Line
-        var listAttr = [NSRange: ListItem]()
-        textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
-            guard textStorage.substring(from: range) != "\n", let value = value as? ListItem else { return }
-            listAttr[range] = value
-        }
-        
         
         var lastListItem: ListItem? = nil
-        for attr in listAttr.sorted(by: { $0.key.location > $1.key.location }) {
-            let value = attr.value
-            let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key)
-            for line in lines.reversed() {
-                var lineLength = line.range.length
-                var lineLocation = line.range.location
-                var lineRange: NSRange {
-                        NSRange(location: lineLocation, length: lineLength)
-                }
-                // Insert empty line before first list line
-                if let previousLine = layoutManagerDelegate!.richTextView.previousContentLine(from: line.range.location),
-                   previousLine.range.length > 0,
-                   previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
-                    textStorage.replaceCharacters(in: NSRange(location: previousLine.range.endLocation, length: 0), with: "\n")
-                    return
-                    lineLocation += 1
-                }
-                // Insert empty line after last list line
-                if let nextLine = layoutManagerDelegate!.richTextView.nextContentLine(from: line.range.location),
-                   nextLine.range.length == 0 || (nextLine.range.length > 1 && nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil) {
-                    textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\(Character.blankLineFiller)\n")
-                    let paraStyle = layoutManagerDelegate!.paragraphStyle!
-                    textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: nextLine.range.location, length: 1))
-                    return
-                }
-                let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
-                // Removing multible line filler chars if text has been written in the line
-                let blankCharPositions = line.text.string[Character.blankLineFiller]
-                if blankCharPositions.count > 1 {
-                    for pos in blankCharPositions {
-                        if !skipNextLineMarker, pos == 0 { continue }
-                        let charLocation = line.range.location + pos
-                        textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-                        return
-                        lineLength -= 1
-                    }
-                }
-                // Inserting line filler char if not present
-                if line.text.string[0] != Character.blankLineFiller {
-                    let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
-                    textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
-                    return
-                    lineLength += 1
-                }
-                // Ignoring lines with skipNextLineMarker
-                if skipNextLineMarker {
-                    drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
-                    continue
-                }
-                // Adding one ListItem-Reference per line
-                if lines.count > 1 {
-                    let copy = value.deepCopy()
-                    copy.nextItem = lastListItem
-                    lastListItem = copy
-                    textStorage.addAttribute(.listItem, value: copy, range: lineRange)
-                    drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
-                    return
-                    continue
-                }
-                // If everything is correct just continue
-                value.nextItem = lastListItem
-                lastListItem = value
-                drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: value)
+        let allLines = layoutManagerDelegate!.richTextView.contentLinesInRange(textStorage.fullRange).sorted(by: { $0.range.location < $1.range.location })
+        for i in allLines.count-1...0 {
+            let line = allLines[i]
+            let lineRange = line.range
+            let lineListItem = line.range.length == 0 ? nil : line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
+            
+            guard let lineListItem = lineListItem else {
+                continue
             }
+            
+            let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
+            
+            let nextLine = i+1 == allLines.count ? nil : allLines[i+1]
+            let nextLineListItem = nextLine?.range.length == 0 ? nil : nextLine?.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
+            
+            let prevLine = i == 0 ? nil : allLines[i-1]
+            let prevLineListItem = prevLine?.range.length == 0 ? nil : prevLine?.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
+            
+            // Insert empty line before first list line
+            if let prevLine = prevLine, prevLineListItem == nil {
+                textStorage.replaceCharacters(in: NSRange(location: prevLine.range.endLocation, length: 0), with: "\n")
+                return
+            }
+            // Insert empty line after last list line
+            if let nextLine = nextLine,
+               nextLine.range.length == 0 || (nextLine.range.length > 1 && nextLineListItem == nil) {
+                textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\(Character.blankLineFiller)\n")
+                let paraStyle = layoutManagerDelegate!.paragraphStyle!
+                textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: nextLine.range.location, length: 1))
+                return
+            }
+            // Removing multible line filler chars if text has been written in the line
+            let blankCharPositions = line.text.string[Character.blankLineFiller]
+            if blankCharPositions.count > 1 {
+                for pos in blankCharPositions {
+                    if !skipNextLineMarker, pos == 0 { continue }
+                    let charLocation = line.range.location + pos
+                    textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                    return
+                }
+            }
+            // Inserting line filler char if not present
+            if line.text.string[0] != Character.blankLineFiller {
+                let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
+                textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
+                return
+            }
+            // Ignoring lines with skipNextLineMarker
+            if skipNextLineMarker {
+                drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lastListItem!)
+                continue
+            }
+            // Adding one ListItem-Reference per line
+            if lineListItem == prevLineListItem {
+                let copy = lineListItem.deepCopy()
+                copy.nextItem = lastListItem
+                lastListItem = copy
+                textStorage.addAttribute(.listItem, value: copy, range: lineRange)
+                drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
+                return
+            }
+            // If everything is correct just continue
+            lineListItem.nextItem = lastListItem
+            lastListItem = lineListItem
+            drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: lineListItem)
+            
         }
+        
+        
+//        var listAttr = [NSRange: ListItem]()
+//        textStorage.enumerateAttribute(.listItem, in: textStorage.fullRange, options: []) { (value, range, _) in
+//            guard textStorage.substring(from: range) != "\n", let value = value as? ListItem else { return }
+//            listAttr[range] = value
+//        }
+//
+//
+//        for attr in listAttr.sorted(by: { $0.key.location > $1.key.location }) {
+//            let value = attr.value
+//            let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key)
+//            for line in lines.reversed() {}
+//        }
         
     }
     
@@ -273,7 +283,7 @@ class LayoutManager: NSLayoutManager {
         previousLevel = level
         
         let font = lastLayoutFont ?? defaultFont
-//        drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
+        //        drawListItem(level: level, previousLevel: previousLevel, index: index, rect: newLineRect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
     }
     
     private func drawListItem(level: Int, previousLevel: Int, index: Int, rect: CGRect, paraStyle: NSParagraphStyle, font: UIFont, attributeValue: Any?) {
