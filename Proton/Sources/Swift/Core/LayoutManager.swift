@@ -56,6 +56,15 @@ class LayoutManager: NSLayoutManager {
             let lineListItem = line.range.length == 0 ? nil : line.text.attribute(.listItem, at: 0, effectiveRange: nil) as? ListItem
             
             guard let lineListItem = lineListItem else {
+                if line.text.string == Character.blankLineFiller {
+                    continue
+                }
+                // Removing line filler chars if text has been written in the line
+                let blankCharPositions = line.text.string[Character.blankLineFiller]
+                for pos in blankCharPositions {
+                    let charLocation = line.range.location + pos
+                    textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                }
                 continue
             }
             
@@ -87,8 +96,8 @@ class LayoutManager: NSLayoutManager {
                     if !skipNextLineMarker, pos == 0 { continue }
                     let charLocation = line.range.location + pos
                     textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-                    return
                 }
+                return
             }
             // Inserting line filler char if not present
             if line.text.string[0] != Character.blankLineFiller {
