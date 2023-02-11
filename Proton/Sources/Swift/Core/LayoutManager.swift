@@ -69,6 +69,7 @@ class LayoutManager: NSLayoutManager {
                    previousLine.range.length > 0,
                    previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
                     textStorage.replaceCharacters(in: NSRange(location: previousLine.range.endLocation, length: 0), with: "\n")
+                    return
                     lineLocation += 1
                 }
                 // Insert empty line after last list line
@@ -77,6 +78,7 @@ class LayoutManager: NSLayoutManager {
                     textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\(Character.blankLineFiller)\n")
                     let paraStyle = layoutManagerDelegate!.paragraphStyle!
                     textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: nextLine.range.location, length: 1))
+                    return
                 }
                 let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
@@ -86,6 +88,7 @@ class LayoutManager: NSLayoutManager {
                         if !skipNextLineMarker, pos == 0 { continue }
                         let charLocation = line.range.location + pos
                         textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                        return
                         lineLength -= 1
                     }
                 }
@@ -93,6 +96,7 @@ class LayoutManager: NSLayoutManager {
                 if line.text.string[0] != Character.blankLineFiller {
                     let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
                     textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
+                    return
                     lineLength += 1
                 }
                 // Ignoring lines with skipNextLineMarker
@@ -107,6 +111,7 @@ class LayoutManager: NSLayoutManager {
                     lastListItem = copy
                     textStorage.addAttribute(.listItem, value: copy, range: lineRange)
                     drawListMarkers(textStorage: textStorage, listRange: lineRange, attributeValue: copy)
+                    return
                     continue
                 }
                 // If everything is correct just continue
@@ -146,7 +151,8 @@ class LayoutManager: NSLayoutManager {
         
         // Set correct Paragraph Style
         let levelToSet = attributeValue.indentLvl
-        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { currentStyle, currentRange, _ in
+        var changesHappend = false
+        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { currentStyle, currentRange, pointee in
             guard let currentStyle = (currentStyle as? NSParagraphStyle)?.mutableParagraphStyle else { return }
             let currentLevel = Int(currentStyle.firstLineHeadIndent)/Int(listIndent)
             if currentLevel != levelToSet {
@@ -154,8 +160,11 @@ class LayoutManager: NSLayoutManager {
                 currentStyle.firstLineHeadIndent = indentation
                 currentStyle.headIndent = indentation
                 textStorage.addAttribute(.paragraphStyle, value: currentStyle, range: currentRange)
+                changesHappend = true
+                pointee.pointee = false
             }
         }
+        if changesHappend { return }
         
         //        var levelToSet = 0
         //        textStorage.enumerateAttribute(.paragraphStyle, in: listRange, options: []) { value, range, _ in
