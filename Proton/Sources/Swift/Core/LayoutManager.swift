@@ -330,7 +330,7 @@ class LayoutManager: NSLayoutManager {
         color.set()
         
 //        let marker = layoutManagerDelegate?.listMarkerForItem(at: index, level: level, previousLevel: previousLevel, attributeValue: attributeValue) ?? .string(NSAttributedString(string: "*"))
-        let marker = attributeValue.symbol.value(at: index-1)
+        let marker = attributeValue.symbol.value(at: index)
         
         let listMarkerImage: UIImage
         let markerRect: CGRect

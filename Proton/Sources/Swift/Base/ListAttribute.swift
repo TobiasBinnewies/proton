@@ -21,7 +21,7 @@ class ListItem: NSObject {
     }
     
     var symbol: SequenceGenerator {
-        symbols[indentLvl % symbols.count]
+        symbols[indentLvl-1 % symbols.count]
     }
     
     func changeIndent(indentMode: Indentation) {
