@@ -1028,6 +1028,14 @@ extension EditorView: RichTextViewDelegate {
     func richTextView(_ richTextView: RichTextView, didTapAtLocation location: CGPoint, characterRange: NSRange?) {
         delegate?.editor(self, didTapAtLocation: location, characterRange: characterRange)
     }
+    
+    func setSelection() {
+        richTextView.setSelection()
+    }
+    
+    func shiftSelection(_ value: Int) {
+        richTextView.shiftSelection(value)
+    }
 }
 
 extension EditorView {

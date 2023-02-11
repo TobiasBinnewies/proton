@@ -83,41 +83,41 @@ public class ListCommand: EditorCommand {
         }
         
         ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
-        return
+//        return
 
-        guard selectedRange.length > 0 else {
-            ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
-            return
-        }
-
-        guard let attrValue = attributeValue else {
-//            let paragraphStyle = editor.paragraphStyle
-//            editor.addAttributes([
-//                .paragraphStyle: paragraphStyle
-//            ], at: selectedRange)
-            editor.removeAttribute(.listItem, at: selectedRange)
-            let blankCharPositions = editor.attributedText.substring(from: selectedRange)[Character.blankLineFiller]
-            for pos in blankCharPositions {
-                let charLocation = selectedRange.location + pos
-                editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
-            }
-            return
-        }
-
-        // Fix the list attribute on the trailing `\n` in previous line, if previous line has a listItem attribute applied
-        if let previousLine = editor.previousContentLine(from: selectedRange.location),
-           // TODO: May produce error if previous line length = 0
-           let listValue = editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation - 1, effectiveRange: nil),
-           editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation, effectiveRange: nil) == nil {
-            editor.addAttribute(.listItem, value: listValue, at: NSRange(location: previousLine.range.endLocation, length: 1))
-        }
-
-//        editor.attributedText.enumerateAttribute(.paragraphStyle, in: selectedRange, options: []) { (value, range, _) in
-//            let paraStyle = value as? NSParagraphStyle
-//            let mutableStyle = ListTextProcessor().updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: .indent)
-//            editor.addAttribute(.paragraphStyle, value: mutableStyle ?? editor.paragraphStyle, at: range)
+//        guard selectedRange.length > 0 else {
+//            ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
+//            return
 //        }
-        editor.addAttribute(.listItem, value: attrValue, at: selectedRange)
-        attributeValue = nil
+//
+//        guard let attrValue = attributeValue else {
+////            let paragraphStyle = editor.paragraphStyle
+////            editor.addAttributes([
+////                .paragraphStyle: paragraphStyle
+////            ], at: selectedRange)
+//            editor.removeAttribute(.listItem, at: selectedRange)
+//            let blankCharPositions = editor.attributedText.substring(from: selectedRange)[Character.blankLineFiller]
+//            for pos in blankCharPositions {
+//                let charLocation = selectedRange.location + pos
+//                editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+//            }
+//            return
+//        }
+//
+//        // Fix the list attribute on the trailing `\n` in previous line, if previous line has a listItem attribute applied
+//        if let previousLine = editor.previousContentLine(from: selectedRange.location),
+//           // TODO: May produce error if previous line length = 0
+//           let listValue = editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation - 1, effectiveRange: nil),
+//           editor.attributedText.attribute(.listItem, at: previousLine.range.endLocation, effectiveRange: nil) == nil {
+//            editor.addAttribute(.listItem, value: listValue, at: NSRange(location: previousLine.range.endLocation, length: 1))
+//        }
+//
+////        editor.attributedText.enumerateAttribute(.paragraphStyle, in: selectedRange, options: []) { (value, range, _) in
+////            let paraStyle = value as? NSParagraphStyle
+////            let mutableStyle = ListTextProcessor().updatedParagraphStyle(paraStyle: paraStyle, listLineFormatting: editor.listLineFormatting, indentMode: .indent)
+////            editor.addAttribute(.paragraphStyle, value: mutableStyle ?? editor.paragraphStyle, at: range)
+////        }
+//        editor.addAttribute(.listItem, value: attrValue, at: selectedRange)
+//        attributeValue = nil
     }
 }

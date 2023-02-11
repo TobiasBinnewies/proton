@@ -65,6 +65,27 @@ class RichTextView: AutogrowingTextView {
             return .white
         }
     }
+    
+    private var selectedRangeLocation: Int
+//    override var selectedRange: NSRange {
+//        didSet {
+//            if selectedRange.length == 0 {
+//                let offset = selectedRange.location - oldValue.location
+//                shiftSelection(offset)
+//                selectedRange = oldValue
+//                return
+//            }
+//            selectedRangeLocation = selectedRange.location
+//        }
+//    }
+    
+    func shiftSelection(_ value: Int) {
+        selectedRangeLocation += value
+    }
+    
+    func setSelection() {
+        selectedRange = NSRange(location: selectedRangeLocation, length: 0)
+    }
 
     override var selectedTextRange: UITextRange? {
         didSet{
@@ -181,6 +202,8 @@ class RichTextView: AutogrowingTextView {
 
         self.backgroundColor = defaultBackgroundColor
         self.textColor = defaultTextColor
+        
+        self.selectedRangeLocation = selectedRange.location
 
         setupPlaceholder()
     }

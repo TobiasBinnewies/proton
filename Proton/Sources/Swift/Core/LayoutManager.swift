@@ -33,6 +33,8 @@ protocol LayoutManagerDelegate: AnyObject {
     var listLineFormatting: LineFormatting { get }
     
     func listMarkerForItem(at index: Int, level: Int, previousLevel: Int, attributeValue: Any?) -> ListLineMarker
+    
+    func shiftSelection(_ value: Int)
 }
 
 class LayoutManager: NSLayoutManager {
@@ -64,6 +66,7 @@ class LayoutManager: NSLayoutManager {
                 for pos in blankCharPositions {
                     let charLocation = line.range.location + pos
                     textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                    layoutManagerDelegate!.shiftSelection(-1)
                 }
                 continue
             }
@@ -79,6 +82,7 @@ class LayoutManager: NSLayoutManager {
             // Insert empty line before first list line
             if let prevLine = prevLine, prevLineListItem == nil {
                 textStorage.replaceCharacters(in: NSRange(location: prevLine.range.endLocation, length: 0), with: "\n")
+                layoutManagerDelegate!.shiftSelection(1)
                 return
             }
             // Insert empty line after last list line
@@ -96,6 +100,7 @@ class LayoutManager: NSLayoutManager {
                     if !skipNextLineMarker, pos == 0 { continue }
                     let charLocation = line.range.location + pos
                     textStorage.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
+                    layoutManagerDelegate!.shiftSelection(-1)
                 }
                 return
             }
@@ -103,6 +108,7 @@ class LayoutManager: NSLayoutManager {
             if line.text.string[0] != Character.blankLineFiller {
                 let blankChar = NSAttributedString(string: String(Character.blankLineFiller), attributes: line.text.attributes(at: 0, effectiveRange: nil))
                 textStorage.replaceCharacters(in: NSRange(location: line.range.location, length: 0), with: blankChar)
+                layoutManagerDelegate!.shiftSelection(1)
                 return
             }
             // Ignoring lines with skipNextLineMarker

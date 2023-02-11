@@ -69,6 +69,8 @@ public class ListTextProcessor: TextProcessing {
 //
             let indentMode: Indentation  = (modifierFlags == .shift) ? .outdent : .indent
             updateListItemIfRequired(editor: editor, editedRange: editedRange, indentMode: indentMode)
+            
+            editor.setSelection()
         case .enter:
             
             guard
@@ -130,6 +132,7 @@ public class ListTextProcessor: TextProcessing {
 //                    exitListsIfRequired(editor: editor, editedRange: editedRange)
 //                }
 //            }
+            editor.setSelection()
 
         case .backspace:
             let attributedText = editor.attributedText
@@ -314,9 +317,11 @@ public class ListTextProcessor: TextProcessing {
         attrs[.listItem] = listAttributeValue.deepCopy()
         let marker = NSAttributedString(string: String(Character.blankLineFiller), attributes: attrs)
         
-        var insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
+        let insertMarkerInLastLine = editor.attributedText.string[editedRange.location] == Character.blankLineFiller
         
         editor.replaceCharacters(in: insertMarkerInLastLine ? NSRange(location: editedRange.location-1, length: 0) : editedRange, with: marker)
+        
+        editor.shiftSelection(1)
 //        editor.selectedRange = editedRange.fitInRange(editor.contentLength)
 //        editor.selectedRange = editedRange.nextPosition
     }
@@ -342,6 +347,7 @@ public class ListTextProcessor: TextProcessing {
             let charLocation = lineRange.location + pos
             editor.replaceCharacters(in: NSRange(location: charLocation, length: 1), with: "")
             lineLength -= 1
+            editor.shiftSelection(-1)
         }
         if lineLength == 0 {
             let currentParaStyle = (editor.typingAttributes[.paragraphStyle] as? NSParagraphStyle)?.mutableParagraphStyle
@@ -349,7 +355,7 @@ public class ListTextProcessor: TextProcessing {
             currentParaStyle?.headIndent = 0
             editor.typingAttributes[.paragraphStyle] = currentParaStyle
         }
-        editor.selectedRange = NSRange(location: lineRange.location, length: 0)
+//        editor.selectedRange = NSRange(location: lineRange.location, length: 0)
     }
 
 //    func updatedParagraphStyle(paraStyle: NSParagraphStyle?, listLineFormatting: LineFormatting, indentMode: Indentation) -> NSParagraphStyle? {
