@@ -43,12 +43,16 @@ class LayoutManager: NSLayoutManager {
     
     private let defaultBulletColor: UIColor = UIColor.black
     private var counters = [Int: Int]()
+    private var previousLevel = 0
     
     weak var layoutManagerDelegate: LayoutManagerDelegate?
     
     override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
         guard let textStorage = self.textStorage else { return }
+        
+        counters = [:]
+        previousLevel = 0
         
         // Adding one ListItem-Reference per Line
         var lineItems = [EditorLine: ListItem?]()
@@ -176,25 +180,23 @@ class LayoutManager: NSLayoutManager {
     }
     
     private func drawListMarkers(textStorage: NSTextStorage, listRange: NSRange, attributeValue: ListItem) {
-        var lastLayoutRect: CGRect?
-        var lastLayoutParaStyle: NSParagraphStyle?
-        var lastLayoutFont: UIFont?
-        
-        var previousLevel = 0
+//        var lastLayoutRect: CGRect?
+//        var lastLayoutParaStyle: NSParagraphStyle?
+//        var lastLayoutFont: UIFont?
         
         let defaultFont = self.layoutManagerDelegate?.font ?? UIFont.preferredFont(forTextStyle: .body)
         let listIndent = layoutManagerDelegate?.listLineFormatting.indentation ?? 25.0
         
-        var prevStyle: NSParagraphStyle?
+//        var prevStyle: NSParagraphStyle?
+//
+//        if listRange.location > 0,
+//           textStorage.attribute(.listItem, at: listRange.location - 1, effectiveRange: nil) != nil {
+//            prevStyle = textStorage.attribute(.paragraphStyle, at: listRange.location - 1, effectiveRange: nil) as? NSParagraphStyle
+//        }
         
-        if listRange.location > 0,
-           textStorage.attribute(.listItem, at: listRange.location - 1, effectiveRange: nil) != nil {
-            prevStyle = textStorage.attribute(.paragraphStyle, at: listRange.location - 1, effectiveRange: nil) as? NSParagraphStyle
-        }
-        
-        if prevStyle == nil {
-            counters = [:]
-        }
+//        if prevStyle == nil {
+//            counters = [:]
+//        }
         
         // Set correct Paragraph Style
         let levelToSet = attributeValue.indentLvl
@@ -265,13 +267,13 @@ class LayoutManager: NSLayoutManager {
                 self.counters[level] = index + 1
                 
                 // reset index counter for level when list indentation (level) changes.
-                if level > previousLevel{
+                if level > self.previousLevel {
                     index = 0
                     self.counters[level] = 1
                 }
                 
-                self.drawListItem(level: level, previousLevel: previousLevel, index: index, rect: rect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
-                previousLevel = level
+                self.drawListItem(level: level, previousLevel: self.previousLevel, index: index, rect: rect, paraStyle: paraStyle, font: font, attributeValue: attributeValue)
+                self.previousLevel = level
                 
                 // TODO: should this be moved inside level > 0 check above?
             }
