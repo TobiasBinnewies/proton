@@ -66,7 +66,7 @@ public enum EditorHeight {
 /// - Note:
 /// A line does not represent a full sentence in the `EditorView` but instead may start and/or end in the middle of
 /// another based on how the content is laid  out in the `EditorView`.
-public struct EditorLine {
+public struct EditorLine: Hashable {
 
     /// Text contained in the current line.
     public let text: NSAttributedString
