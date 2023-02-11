@@ -323,7 +323,7 @@ public class ListTextProcessor: TextProcessing {
         editor.removeAttribute(.listItem, at: lineRange)
         
         let nextCharRange = NSRange(location: lineRange.endLocation+1, length: 1)
-        if editor.attributedText.substring(from: nextCharRange) == "\n" {
+        if editor.attributedText.string[nextCharRange.location] == "\n" {
             editor.removeAttribute(.listItem, at: nextCharRange)
         }
         
