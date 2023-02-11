@@ -66,15 +66,15 @@ class LayoutManager: NSLayoutManager {
                 }
                 // Insert empty line before first list line
                 if let previousLine = layoutManagerDelegate!.richTextView.previousContentLine(from: line.range.location),
-                   previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil,
-                   previousLine.range.length > 0 {
+                   previousLine.range.length > 0,
+                   previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
                     textStorage.replaceCharacters(in: NSRange(location: previousLine.range.endLocation, length: 0), with: "\n")
                     lineLocation += 1
                 }
                 // Insert empty line after last list line
                 if let nextLine = layoutManagerDelegate!.richTextView.nextContentLine(from: line.range.location),
-                   nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil,
-                   nextLine.range.length > 0 {
+                   nextLine.range.length > 0,
+                   nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
                     textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\n")
                 }
                 let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
