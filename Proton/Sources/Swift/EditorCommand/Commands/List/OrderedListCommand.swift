@@ -21,7 +21,7 @@ public class OrderedListCommand: ListCommand {
            editor.attributedText.attribute(.listItem, at: min(editor.contentLength - 1, editor.selectedRange.location), effectiveRange: nil) != nil {
             self.attributeValue = nil
         } else {
-            self.attributeValue = ListItem(indentLvl: 5, symbol: NumericSequenceGenerator())
+            self.attributeValue = ListItem(indentLvl: 1, symbols: [NumericSequenceGenerator()])
         }
         // create / remove list
         super.execute(on: editor)

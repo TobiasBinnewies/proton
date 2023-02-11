@@ -20,7 +20,7 @@ public class UnorderedListCommand: ListCommand {
         if let line = editor.currentContentLine(from: editor.selectedRange.location), line.range.length > 0, line.text.attribute(.listItem, at: 0, effectiveRange: nil) != nil {
             self.attributeValue = nil
         } else {
-            self.attributeValue = ListItem(indentLvl: 1, symbol: SquareBulletSequenceGenerator())
+            self.attributeValue = ListItem(indentLvl: 1, symbols: [SquareBulletSequenceGenerator()])
         }
         // create / remove list
         super.execute(on: editor)

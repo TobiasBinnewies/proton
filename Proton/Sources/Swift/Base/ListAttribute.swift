@@ -11,13 +11,17 @@ import UIKit
 
 class ListItem: NSObject {
     var indentLvl: Int
-    var symbol: SequenceGenerator
+    var symbols: [SequenceGenerator]
     var nextItem: ListItem?
     
-    init(indentLvl: Int, symbol: SequenceGenerator, nextItem: ListItem? = nil) {
+    init(indentLvl: Int, symbols: [SequenceGenerator], nextItem: ListItem? = nil) {
         self.indentLvl = indentLvl
-        self.symbol = symbol
+        self.symbols = symbols
         self.nextItem = nextItem
+    }
+    
+    var symbol: SequenceGenerator {
+        symbols[indentLvl % symbols.count]
     }
     
     func changeIndent(indentMode: Indentation) {
@@ -30,7 +34,7 @@ class ListItem: NSObject {
     }
     
     func deepCopy() -> ListItem {
-        ListItem(indentLvl: self.indentLvl, symbol: self.symbol, nextItem: self.nextItem)
+        ListItem(indentLvl: self.indentLvl, symbols: self.symbols, nextItem: self.nextItem)
     }
     
 //    var mutableCopy: MutableListItem {
