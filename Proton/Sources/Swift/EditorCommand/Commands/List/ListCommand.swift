@@ -83,6 +83,8 @@ public class ListCommand: EditorCommand {
         }
         
         ListTextProcessor().createListItem(editor: editor, editedRange: selectedRange, attributeValue: attributeValue)
+        
+        editor.setSelection()
 //        return
 
 //        guard selectedRange.length > 0 else {
