@@ -344,7 +344,10 @@ public class ListTextProcessor: TextProcessing {
             lineLength -= 1
         }
         if lineLength == 0 {
-            
+            let currentParaStyle = (editor.typingAttributes[.paragraphStyle] as? NSParagraphStyle)?.mutableParagraphStyle
+            currentParaStyle?.firstLineHeadIndent = 0
+            currentParaStyle?.headIndent = 0
+            editor.typingAttributes[.paragraphStyle] = currentParaStyle
         }
         editor.selectedRange = NSRange(location: lineRange.location, length: 0)
     }
