@@ -84,6 +84,7 @@ class RichTextView: AutogrowingTextView {
     }
     
     func setSelection() {
+        self.layoutManager.textStorage
         selectedRange = NSRange(location: selectedRange.location + selectedRangeShift, length:selectedRange.length)
         selectedRangeShift = 0
     }

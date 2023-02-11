@@ -132,7 +132,7 @@ public class ListTextProcessor: TextProcessing {
 //                    exitListsIfRequired(editor: editor, editedRange: editedRange)
 //                }
 //            }
-            editor.setSelection()
+//            editor.setSelection()
 
         case .backspace:
             let attributedText = editor.attributedText
