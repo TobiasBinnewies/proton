@@ -63,6 +63,17 @@ public class ListCommand: EditorCommand {
     /// - Note:
     /// When set to nil before running `execute`, it removes list formatting from the selected range of text.
     var attributeValue: ListItem?
+    
+    public func execute(on editor: EditorView, symbols: [SequenceGenerator]) {
+        // remove list if existing
+        if let line = editor.currentContentLine(from: editor.selectedRange.location), line.range.length > 0, line.text.attribute(.listItem, at: 0, effectiveRange: nil) != nil {
+            self.attributeValue = nil
+        } else {
+            self.attributeValue = ListItem(indentLvl: 1, symbols: symbols)
+        }
+        // create / remove list
+        execute(on: editor)
+    }
 
     /// Executes the command with value of `attributeValue` for `.listItem` attribute. If the `attributeValue` is nil, executing
     /// removed list formatting from the selected range of text.

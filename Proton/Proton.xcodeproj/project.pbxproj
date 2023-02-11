@@ -133,8 +133,6 @@
 		1BFFEF1F23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF1E23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift */; };
 		1BFFEF2123C33EA900D2BA35 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFFEF2023C33EA900D2BA35 /* PanelView.swift */; };
 		4D120F96298FFC880090FA89 /* FontStyleCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F95298FFC880090FA89 /* FontStyleCommand.swift */; };
-		4D120F9B299029690090FA89 /* UnorderedListCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9A299029690090FA89 /* UnorderedListCommand.swift */; };
-		4D120F9D29902A3E0090FA89 /* OrderedListCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */; };
 		4D120F9F299184EA0090FA89 /* ListAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D120F9E299184EA0090FA89 /* ListAttribute.swift */; };
 /* End PBXBuildFile section */
 
@@ -298,8 +296,6 @@
 		1BFFEF1E23C3366200D2BA35 /* MockAttachmentOffsetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAttachmentOffsetProvider.swift; sourceTree = "<group>"; };
 		1BFFEF2023C33EA900D2BA35 /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
 		4D120F95298FFC880090FA89 /* FontStyleCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStyleCommand.swift; sourceTree = "<group>"; };
-		4D120F9A299029690090FA89 /* UnorderedListCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnorderedListCommand.swift; sourceTree = "<group>"; };
-		4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderedListCommand.swift; sourceTree = "<group>"; };
 		4D120F9E299184EA0090FA89 /* ListAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAttribute.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -694,8 +690,6 @@
 				1B4B60C9247FC51E002B63CF /* ListCommand.swift */,
 				1BD18580284861F7001F4FBC /* ListIndentCommand.swift */,
 				1BD18582284863A6001F4FBC /* ListOutdentCommand.swift */,
-				4D120F9A299029690090FA89 /* UnorderedListCommand.swift */,
-				4D120F9C29902A3E0090FA89 /* OrderedListCommand.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -1026,8 +1020,6 @@
 				1B975AFD23CD40D200EC410C /* RichTextRendererContext.swift in Sources */,
 				1B91E7B126AA685E0002DF45 /* AttributesToggleCommand.swift in Sources */,
 				1B45CDBC23BF1174001EB196 /* Types.swift in Sources */,
-				4D120F9B299029690090FA89 /* UnorderedListCommand.swift in Sources */,
-				4D120F9D29902A3E0090FA89 /* OrderedListCommand.swift in Sources */,
 				1B82571223C5799C0033A0A9 /* FontExtensions.swift in Sources */,
 				1B45CDE423C05916001EB196 /* SelectionView.swift in Sources */,
 				1B30A3602489CE3E00FA1D48 /* ListFormattingProvider.swift in Sources */,
