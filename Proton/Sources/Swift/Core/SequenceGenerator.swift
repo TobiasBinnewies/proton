@@ -136,10 +136,13 @@ public protocol SequenceGenerator {
 
 /// Simple numeric sequence generator.
 public struct NumericSequenceGenerator: SequenceGenerator {
-    public init() { }
+    let withBraces: Bool
+    public init(withBraces: Bool = false) {
+        self.withBraces = withBraces
+    }
     public func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
-        let text = "\(index + 1)."
+        let text = "\(withBraces ? "(" : "")\((index + 1))\(withBraces ? ")" : ".")"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
