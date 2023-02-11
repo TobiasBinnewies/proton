@@ -60,8 +60,14 @@ class LayoutManager: NSLayoutManager {
             let lines = layoutManagerDelegate!.richTextView.contentLinesInRange(attr.key)
             for line in lines.reversed() {
                 var lineLength = line.range.length
+                var lineLocation = line.range.location
                 var lineRange: NSRange {
-                        NSRange(location: line.range.location, length: lineLength)
+                        NSRange(location: lineLocation, length: lineLength)
+                }
+                if let previousLine = layoutManagerDelegate!.richTextView.previousContentLine(from: line.range.location),
+                   previousLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil,
+                   previousLine.range.length > 0 {
+                    textStorage.replaceCharacters(in: NSRange(location: previousLine.range.endLocation, length: 0), with: "\n")
                 }
                 let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
