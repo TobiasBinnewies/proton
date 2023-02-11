@@ -73,9 +73,10 @@ class LayoutManager: NSLayoutManager {
                 }
                 // Insert empty line after last list line
                 if let nextLine = layoutManagerDelegate!.richTextView.nextContentLine(from: line.range.location),
-                   nextLine.range.length > 0,
-                   nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil {
-                    textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\n")
+                   nextLine.range.length == 0 || (nextLine.range.length > 1 && nextLine.text.attribute(.listItem, at: 0, effectiveRange: nil) == nil) {
+                    textStorage.replaceCharacters(in: NSRange(location: nextLine.range.location, length: 0), with: "\n\(Character.blankLineFiller)")
+                    let paraStyle = layoutManagerDelegate!.paragraphStyle!
+                    textStorage.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: nextLine.range.location+1, length: 1))
                 }
                 let skipNextLineMarker = textStorage.string[lineRange.endLocation+1] != nil && textStorage.attribute(.skipNextListMarker, at: lineRange.endLocation+1, effectiveRange: nil) != nil
                 // Removing multible line filler chars if text has been written in the line
