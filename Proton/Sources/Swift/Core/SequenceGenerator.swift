@@ -170,6 +170,10 @@ public class NumericSequenceGenerator: SequenceGenerator {
         super.init(coder: coder)
     }
     
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
+    }
+    
     public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "\(withBraces ? "(" : "")\((index + 1))\(withBraces ? ")" : ".")"
@@ -180,6 +184,10 @@ public class NumericSequenceGenerator: SequenceGenerator {
 public class UpperLetterSequenceGenerator: SequenceGenerator {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
     }
     
     public override func value(at index: Int) -> ListLineMarker {
@@ -198,6 +206,10 @@ public class LowerLetterSequenceGenerator: SequenceGenerator {
         super.init(coder: coder)
     }
     
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
+    }
+    
     public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         var marker = ""
@@ -214,6 +226,10 @@ public class UpperRomanSequenceGenerator: SequenceGenerator {
         super.init(coder: coder)
     }
     
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
+    }
+    
     public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "\(withBraces ? "(" : "")\((index + 1).upperRomanNumeral)\(withBraces ? ")" : ".")"
@@ -224,6 +240,10 @@ public class UpperRomanSequenceGenerator: SequenceGenerator {
 public class LowerRomanSequenceGenerator: SequenceGenerator {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
     }
     
     public override func value(at index: Int) -> ListLineMarker {
@@ -239,6 +259,10 @@ public class DiamondBulletSequenceGenerator: SequenceGenerator {
         super.init(coder: coder)
     }
     
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
+    }
+    
     public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "◈"
@@ -252,6 +276,10 @@ public class SquareBulletSequenceGenerator: SequenceGenerator {
         super.init(coder: coder)
     }
     
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
+    }
+    
     public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "▣"
@@ -262,6 +290,10 @@ public class SquareBulletSequenceGenerator: SequenceGenerator {
 public class DotBulletSequenceGenerator: SequenceGenerator {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    public override init(withBraces: Bool = false, count: Int = 1) {
+        super.init(withBraces: withBraces, count: count)
     }
     
     public override func value(at index: Int) -> ListLineMarker {
