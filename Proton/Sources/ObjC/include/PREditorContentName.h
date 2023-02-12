@@ -31,6 +31,7 @@ NS_SWIFT_NAME(EditorContentName)
 
 - (instancetype)initWithRawValue:(NSString *)rawValue;
 
++ (BOOL)supportsSecureCoding;
 + (PREditorContentName *)paragraphName;
 + (PREditorContentName *)viewOnlyName;
 + (PREditorContentName *)newlineName;
