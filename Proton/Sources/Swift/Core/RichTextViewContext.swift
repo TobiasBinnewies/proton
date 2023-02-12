@@ -63,10 +63,10 @@ class RichTextViewContext: NSObject, UITextViewDelegate {
         richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeSelection: range, attributes: attributes, contentType: contentType)
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        guard let richTextView = textView as? RichTextView else { return }
-        richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeTextAtRange: textView.selectedRange)
-    }
+//    func textViewDidChange(_ textView: UITextView) {
+//        guard let richTextView = textView as? RichTextView else { return }
+//        richTextView.richTextViewDelegate?.richTextView(richTextView, didChangeTextAtRange: textView.selectedRange)
+//    }
 
     func resetAttachmentSelection(_ textView: UITextView) {
         guard textView.delegate === self else { return }
