@@ -129,6 +129,8 @@ extension Int {
 /// Represents a Sequence generator that can return a value based on given index.
 /// Besides other possible uses, this is used in Lists for generation of bullets/numbering.
 public class SequenceGenerator: NSObject, NSSecureCoding {
+    public static let supportsSecureCoding: Bool = true
+    
     
     let withBraces: Bool
     let count: Int
@@ -138,9 +140,9 @@ public class SequenceGenerator: NSObject, NSSecureCoding {
         case count = "count"
     }
     
-    public static var supportsSecureCoding: Bool = true
+//    public static var supportsSecureCoding: Bool = true
     
-    public required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         let withBraces = coder.decodeBool(forKey: Key.withBraces.rawValue)
         let count = coder.decodeInteger(forKey: Key.count.rawValue)
         self.withBraces = withBraces
