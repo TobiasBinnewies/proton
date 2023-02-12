@@ -154,10 +154,10 @@ public class SequenceGenerator: NSObject, NSSecureCoding {
         self.sequence = SequenceType(rawValue: rawSequence)!
     }
     
-    public init(seqeunce: SequenceType, withBraces: Bool = false, count: Int = 1) {
+    public init(sequence: SequenceType, withBraces: Bool = false, count: Int = 1) {
         self.withBraces = withBraces
         self.count = count
-        self.sequence = seqeunce
+        self.sequence = sequence
     }
     
     public func encode(with coder: NSCoder) {
