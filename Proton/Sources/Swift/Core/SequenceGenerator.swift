@@ -128,33 +128,61 @@ extension Int {
 
 /// Represents a Sequence generator that can return a value based on given index.
 /// Besides other possible uses, this is used in Lists for generation of bullets/numbering.
-public protocol SequenceGenerator {
+public class SequenceGenerator: NSObject, NSSecureCoding {
+    
+    let withBraces: Bool
+    let count: Int
+    
+    enum Key: String {
+        case withBraces = "withBraces"
+        case count = "count"
+    }
+    
+    public static var supportsSecureCoding: Bool = true
+    
+    public required init?(coder: NSCoder) {
+        let withBraces = coder.decodeBool(forKey: Key.withBraces.rawValue)
+        let count = coder.decodeInteger(forKey: Key.count.rawValue)
+        self.withBraces = withBraces
+        self.count = count
+    }
+    
+    public init(withBraces: Bool = false, count: Int = 1) {
+        self.withBraces = withBraces
+        self.count = count
+    }
+    
+    public func encode(with coder: NSCoder) {
+        coder.encode(withBraces, forKey: Key.withBraces.rawValue)
+        coder.encode(count, forKey: Key.count.rawValue)
+    }
+    
     /// Returns a value representing the given index.
     /// - Parameter index: Index for which the value is being fetched.
-    func value(at index: Int) -> ListLineMarker
+    public func value(at index: Int) -> ListLineMarker {
+        .string(NSAttributedString())
+    }
 }
 
 /// Simple numeric sequence generator.
-public struct NumericSequenceGenerator: SequenceGenerator {
-    let withBraces: Bool
-    public init(withBraces: Bool = false) {
-        self.withBraces = withBraces
+public class NumericSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    public func value(at index: Int) -> ListLineMarker {
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "\(withBraces ? "(" : "")\((index + 1))\(withBraces ? ")" : ".")"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
 
-public struct UpperLetterSequenceGenerator: SequenceGenerator {
-    let count: Int
-    let withBraces: Bool
-    public init(count: Int = 1, withBraces: Bool = false) {
-        self.count = count
-        self.withBraces = withBraces
+public class UpperLetterSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    public func value(at index: Int) -> ListLineMarker {
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         var marker = ""
         for _ in 0..<count {
@@ -165,14 +193,12 @@ public struct UpperLetterSequenceGenerator: SequenceGenerator {
     }
 }
 
-public struct LowerLetterSequenceGenerator: SequenceGenerator {
-    var count: Int
-    let withBraces: Bool
-    public init(count: Int = 1, withBraces: Bool = false) {
-        self.count = count
-        self.withBraces = withBraces
+public class LowerLetterSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    public func value(at index: Int) -> ListLineMarker {
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         var marker = ""
         for _ in 0..<count {
@@ -183,24 +209,24 @@ public struct LowerLetterSequenceGenerator: SequenceGenerator {
     }
 }
 
-public struct UpperRomanSequenceGenerator: SequenceGenerator {
-    let withBraces: Bool
-    public init(withBraces: Bool = false) {
-        self.withBraces = withBraces
+public class UpperRomanSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    public func value(at index: Int) -> ListLineMarker {
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "\(withBraces ? "(" : "")\((index + 1).upperRomanNumeral)\(withBraces ? ")" : ".")"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
 
-public struct LowerRomanSequenceGenerator: SequenceGenerator {
-    let withBraces: Bool
-    public init(withBraces: Bool = false) {
-        self.withBraces = withBraces
+public class LowerRomanSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    public func value(at index: Int) -> ListLineMarker {
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "\(withBraces ? "(" : "")\((index + 1).lowerRomanNumeral)\(withBraces ? ")" : ".")"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
@@ -208,9 +234,12 @@ public struct LowerRomanSequenceGenerator: SequenceGenerator {
 }
 
 /// Simple bullet sequence generator that returns a diamond symbol.
-public struct DiamondBulletSequenceGenerator: SequenceGenerator {
-    public init() { }
-    public func value(at index: Int) -> ListLineMarker {
+public class DiamondBulletSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "◈"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
@@ -218,18 +247,24 @@ public struct DiamondBulletSequenceGenerator: SequenceGenerator {
 }
 
 /// Simple bullet sequence generator that returns a square symbol.
-public struct SquareBulletSequenceGenerator: SequenceGenerator {
-    public init() { }
-    public func value(at index: Int) -> ListLineMarker {
+public class SquareBulletSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "▣"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))
     }
 }
 
-public struct DotBulletSequenceGenerator: SequenceGenerator {
-    public init() { }
-    public func value(at index: Int) -> ListLineMarker {
+public class DotBulletSequenceGenerator: SequenceGenerator {
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    public override func value(at index: Int) -> ListLineMarker {
         let font = UIFont.preferredFont(forTextStyle: .body)
         let text = "◉"
         return .string(NSAttributedString(string: text, attributes: [.font: font]))

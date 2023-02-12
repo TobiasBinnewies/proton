@@ -9,7 +9,30 @@
 import Foundation
 import UIKit
 
-class ListItem: NSObject {
+class ListItem: NSObject, NSSecureCoding {
+    static var supportsSecureCoding: Bool = true
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(indentLvl, forKey: Key.indentLvl.rawValue)
+        coder.encode(nextItem, forKey: Key.nextItem.rawValue)
+        coder.encode(symbols, forKey: Key.symbols.rawValue)
+    }
+    
+    enum Key: String {
+        case symbols = "symbols"
+        case indentLvl = "indentLvl"
+        case nextItem = "nextItem"
+    }
+    
+    required convenience init?(coder: NSCoder) {
+        let indentLvl = coder.decodeInteger(forKey: Key.indentLvl.rawValue)
+        let nextItem = coder.decodeObject(of: ListItem.self, forKey: Key.nextItem.rawValue)
+        let symbols = coder.decodeObject(of: [NSArray.self, SequenceGenerator.self], forKey: Key.symbols.rawValue) as! [SequenceGenerator]
+        
+        self.init(indentLvl: indentLvl, symbols: symbols, nextItem: nextItem)
+
+    }
+    
     var indentLvl: Int
     var symbols: [SequenceGenerator]
     var nextItem: ListItem?
