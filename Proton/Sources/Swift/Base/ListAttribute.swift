@@ -27,7 +27,7 @@ public class ListItem: NSObject, NSSecureCoding {
     required convenience public init?(coder: NSCoder) {
         let indentLvl = coder.decodeInteger(forKey: Key.indentLvl.rawValue)
         let nextItem = coder.decodeObject(of: ListItem.self, forKey: Key.nextItem.rawValue)
-        let symbols = coder.decodeObject(of: [NSArray.self, SequenceGenerator.self], forKey: Key.symbols.rawValue) as! [SequenceGenerator]
+        let symbols = coder.decodeObject(of: [NSArray.self, SequenceGenerator.self, NSString.self], forKey: Key.symbols.rawValue) as! [SequenceGenerator]
         
         self.init(indentLvl: indentLvl, symbols: symbols, nextItem: nextItem)
 
