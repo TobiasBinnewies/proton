@@ -239,7 +239,7 @@ open class EditorView: UIView {
     }
     
     /// Gets the textContainer
-    public var textContainier: NSTextContainer {
+    public var textContainer: NSTextContainer {
         get { richTextView.textContainer }
     }
 
