@@ -103,7 +103,7 @@ public struct EditorLine: Hashable {
 /// may be restricted using an absolute value or by using auto-layout constraints. Instantiation of `EditorView` is simple and straightforward
 /// and can be used to host simple formatted text or complex layout containing multiple nested `EditorView` via use of `Attachment`.
 open class EditorView: UIView {
-    public let richTextView: RichTextView
+    let richTextView: RichTextView
 
     let context: RichTextViewContext
 
@@ -236,6 +236,11 @@ open class EditorView: UIView {
     public var contentInset: UIEdgeInsets {
         get { richTextView.contentInset }
         set { richTextView.contentInset = newValue }
+    }
+    
+    /// Gets the textContainer
+    public var textContainier: NSTextContainer {
+        get { richTextView.textContainer }
     }
 
     @available(iOS 11.1, *)
